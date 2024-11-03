@@ -33,7 +33,7 @@ import { MatSelectModule } from "@angular/material/select";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserFormComponent implements OnInit {
-  @Input() user: Partial<User> = {};
+  @Input() user: Partial<User> | undefined = {};
   @Input() isEditMode = false;
   userForm!: FormGroup;
   filteredCountries!: Observable<string[]>;
