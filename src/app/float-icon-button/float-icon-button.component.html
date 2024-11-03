@@ -1,5 +1,6 @@
 <button
   mat-fab
+  (click)="clickEvent.emit()"
   [ngStyle]="buttonStyles"
   aria-label="Floating action button">
   <mat-icon [fontIcon]="icon"></mat-icon>
