@@ -4,7 +4,7 @@ import { User } from "src/app/models/user";
 import { UserFormComponent } from "../user-form/user-form.component";
 
 export interface UserDialogData {
-  user: User | undefined;
+  user: User | null;
   mode: "add" | "edit";
 }
 

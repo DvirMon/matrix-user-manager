@@ -1,9 +1,5 @@
 import { Component, inject } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import {
-  UserDialogComponent,
-  UserDialogData,
-} from "./components/user-dialog/user-dialog.component";
+import { UserDialogService } from "./components/user-dialog/user-dialog.service";
 import { UserFormComponent } from "./components/user-form/user-form.component";
 import { FloatIconButtonComponent } from "./shared/float-icon-button/float-icon-button.component";
 
@@ -17,16 +13,9 @@ import { FloatIconButtonComponent } from "./shared/float-icon-button/float-icon-
 export class AppComponent {
   title = "matrix-user-manager";
 
-  #dialog = inject(MatDialog);
-
-  constructor() {}
+  #dialogService = inject(UserDialogService);
 
   onClickEvent(): void {
-    this.#dialog.open(UserDialogComponent, {
-      data: { mode: "add" } as UserDialogData,
-      autoFocus: true,
-      hasBackdrop: true,
-      disableClose: true,
-    });
+    this.#dialogService.open({ mode: "add", user: null });
   }
 }
