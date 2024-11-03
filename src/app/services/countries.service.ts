@@ -12,7 +12,7 @@ export class CountriesService {
 
   readonly #URL: string = "https://restcountries.com/v3.1/all";
 
-  fetchCountries(): Observable<string[]> {
+  #fetchCountries(): Observable<string[]> {
     if (!this.#countriesCached$) {
       this.#countriesCached$ = this.#getCountries();
     }
@@ -27,7 +27,7 @@ export class CountriesService {
   }
 
   filterCountries(query: string): Observable<string[]> {
-    return this.fetchCountries().pipe(
+    return this.#fetchCountries().pipe(
       map((countries) =>
         countries.filter((country) =>
           country.toLowerCase().includes(query.toLowerCase())

@@ -38,13 +38,15 @@
       <mat-label>Country</mat-label>
       <input
         matInput
-        autocomplete="off"
+        type="text"
+        autocomplete="new-password"
         formControlName="country"
         [matAutocomplete]="auto"
+        (input)="onInputChanged($event)"
         required />
       <mat-autocomplete #auto="matAutocomplete">
         <mat-option
-          *ngFor="let country of filteredCountries | async"
+          *ngFor="let country of filteredCountries$ | async"
           [value]="country">
           {{ country }}
         </mat-option>
@@ -53,7 +55,7 @@
 
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>City</mat-label>
-      <input matInput autocomplete="off" formControlName="city" required />
+      <input matInput autocomplete="new-password" formControlName="city" required />
     </mat-form-field>
   </div>
 
