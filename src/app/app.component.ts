@@ -10,4 +10,9 @@ import { FloatIconButtonComponent } from "./float-icon-button/float-icon-button.
 })
 export class AppComponent {
   title = "matrix-user-manager";
+
+
+  onClickEvent(): void {
+    alert('works')
+  }
 }
