@@ -36,7 +36,6 @@ import { UserDialogComponent } from "../user-dialog/user-dialog.component";
 })
 export class UserFormComponent implements OnInit {
   @Input() user: Partial<User> | undefined = {};
-  @Input() isEditMode = false;
   userForm!: FormGroup;
   filteredCountries!: Observable<string[]>;
 

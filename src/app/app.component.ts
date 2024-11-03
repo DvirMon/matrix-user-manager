@@ -1,8 +1,11 @@
 import { Component, inject } from "@angular/core";
-import { FloatIconButtonComponent } from "./shared/float-icon-button/float-icon-button.component";
+import { MatDialog } from "@angular/material/dialog";
+import {
+  UserDialogComponent,
+  UserDialogData,
+} from "./components/user-dialog/user-dialog.component";
 import { UserFormComponent } from "./components/user-form/user-form.component";
-import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { UserDialogComponent } from "./components/user-dialog/user-dialog.component";
+import { FloatIconButtonComponent } from "./shared/float-icon-button/float-icon-button.component";
 
 @Component({
   selector: "app-root",
@@ -16,16 +19,14 @@ export class AppComponent {
 
   #dialog = inject(MatDialog);
 
-  constructor() {
+  constructor() {}
+
+  onClickEvent(): void {
     this.#dialog.open(UserDialogComponent, {
-      data: {},
+      data: { mode: "add" } as UserDialogData,
       autoFocus: true,
       hasBackdrop: true,
       disableClose: true,
     });
-  }
-
-  onClickEvent(): void {
-    alert("works");
   }
 }
