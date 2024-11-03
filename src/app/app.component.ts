@@ -28,8 +28,10 @@ export class AppComponent {
   users$ = this.#userService.getUsers$();
 
   addSubject = new Subject<void>();
+  editSubject = new Subject<User>();
 
   addEvent$: Observable<User>;
+  editEvent$: Observable<User>;
 
   columns = [
     { key: "firstName", header: "First Name" },
@@ -42,6 +44,7 @@ export class AppComponent {
 
   constructor() {
     this.addEvent$ = this.#onAddEvent();
+    this.editEvent$ = this.#onEditEvent();
   }
 
   #onAddEvent() {
@@ -58,7 +61,29 @@ export class AppComponent {
     );
   }
 
+  #onEditEvent() {
+    return this.editSubject.asObservable().pipe(
+      switchMap((user) =>
+        this.#dialogService
+          .open({ mode: "edit", user })
+          .afterClosed()
+          .pipe(
+            filter((user) => user !== null),
+            tap((user: User) => this.#userService.editUser(user.id, user))
+          )
+      )
+    );
+  }
+
   onClickEvent(): void {
     this.addSubject.next();
+  }
+
+  onEditTableEvent(user: User): void {
+    this.editSubject.next(user);
+  }
+
+  onDeleteEditEvent(user: User): void {
+    this.#userService.deleteUser(user.id);
   }
 }
