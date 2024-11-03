@@ -1,18 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'app-user-table',
+  selector: "app-user-table",
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './user-table.component.html',
-  styleUrls: ['./user-table.component.scss']
+  templateUrl: "./user-table.component.html",
+  styleUrls: ["./user-table.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserTableComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+export class UserTableComponent  {
 }
