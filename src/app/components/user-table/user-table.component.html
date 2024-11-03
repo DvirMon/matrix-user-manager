@@ -1,1 +1,30 @@
-<p>user-table works!</p>
+<div class="table-container">
+  <ng-container *ngIf="data$ | async as data">
+    <table mat-table [dataSource]="data" class="mat-elevation-z8">
+      <!-- Dynamic Column Definitions -->
+      <ng-container
+        *ngFor="let column of columns$ | async"
+        [matColumnDef]="column.key">
+        <th mat-header-cell *matHeaderCellDef>{{ column.header }}</th>
+        <td mat-cell *matCellDef="let row">{{ row[column.key] }}</td>
+      </ng-container>
+
+      <!-- Actions Column (Edit/Delete) -->
+      <ng-container *ngIf="hasActions$ | async" matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button color="primary" (click)="onEdit(row)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="onDelete(row)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Header and Row Definitions -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns$ | async"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns$ | async"></tr>
+    </table>
+  </ng-container>
+</div>
