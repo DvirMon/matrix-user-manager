@@ -1,10 +1,6 @@
 <h1 mat-dialog-title>{{ data ? "Edit User" : "Add User" }}</h1>
 <div mat-dialog-content>
   <app-user-form
-    [user]="data.user"
+    [user]="data.user || {}"
     [isEditMode]="data.mode === 'edit'"></app-user-form>
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button color="primary" (click)="onSave()">Save</button>
 </div>
