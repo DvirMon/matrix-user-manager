@@ -1,5 +1,11 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+  OnInit,
+} from "@angular/core";
 import {
   FormGroup,
   FormsModule,
@@ -16,6 +22,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatSelectModule } from "@angular/material/select";
 import { MatDialogRef } from "@angular/material/dialog";
 import { UserDialogComponent } from "../user-dialog/user-dialog.component";
+import { CountriesService } from "src/app/services/countries.service";
 
 @Component({
   selector: "app-user-form",
@@ -32,7 +39,7 @@ import { UserDialogComponent } from "../user-dialog/user-dialog.component";
   ],
   templateUrl: "./user-form.component.html",
   styleUrls: ["./user-form.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserFormComponent implements OnInit {
   @Input() user: Partial<User> | undefined = {};
@@ -41,17 +48,18 @@ export class UserFormComponent implements OnInit {
 
   #fbn = inject(NonNullableFormBuilder);
 
+  #countriesService = inject(CountriesService);
+
   // dialogRef: MatDialogRef<UserDialogComponent> = inject(MatDialogRef);
   #userFormService = inject(UserFormService);
 
-
   ngOnInit(): void {
-
     this.userForm = this.#userFormService.createUserForm(this.user, this.#fbn);
+
+    this.#countriesService.fetchCountries().subscribe((countries) => {
+      console.log(countries);
+    });
   }
-
-  
-
 
   onSave(): void {
     // Logic for handling save

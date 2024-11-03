@@ -1,14 +1,16 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { Observable, of, map, shareReplay } from "rxjs";
+import { map, Observable, shareReplay } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class CountriesService {
-  #countriesCached$?: Observable<string[]>; // Cache the observable itself
+  #countriesCached$?: Observable<string[]>; 
 
-  http = inject(HttpClient);
+  readonly #http = inject(HttpClient);
+
+  readonly #URL: string = "https://restcountries.com/v3.1/all";
 
   fetchCountries(): Observable<string[]> {
     if (!this.#countriesCached$) {
@@ -18,7 +20,7 @@ export class CountriesService {
   }
 
   #getCountries(): Observable<string[]> {
-    return this.http.get<any[]>("https://restcountries.com/v3.1/all").pipe(
+    return this.#http.get<any[]>(this.#URL).pipe(
       map((data) => data.map((country) => country.name.common)),
       shareReplay(1)
     );
