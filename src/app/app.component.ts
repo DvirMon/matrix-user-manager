@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { FloatIconButtonComponent } from "./float-icon-button/float-icon-button.component";
+import { FloatIconButtonComponent } from "./shared/float-icon-button/float-icon-button.component";
 
 @Component({
   selector: "app-root",
