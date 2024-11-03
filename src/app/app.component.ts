@@ -1,11 +1,10 @@
-import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
-import { MatButtonModule } from "@angular/material/button";
+import { FloatIconButtonComponent } from "./float-icon-button/float-icon-button.component";
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [],
+  imports: [FloatIconButtonComponent],
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
 })
