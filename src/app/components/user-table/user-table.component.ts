@@ -1,10 +1,19 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
 import { BehaviorSubject, Observable, combineLatest, map } from "rxjs";
 import { User } from "src/app/models/user";
+import { UserTableService } from "./user-table.service";
 
 @Component({
   selector: "app-user-table",
@@ -14,57 +23,37 @@ import { User } from "src/app/models/user";
   styleUrls: ["./user-table.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserTableComponent  {
-  
-  #dataSubject = new BehaviorSubject<User[]>([]);
-  #columnsSubject = new BehaviorSubject<{ key: string; header: string }[]>([]);
-  #hasActionsSubject = new BehaviorSubject<boolean>(true);
+export class UserTableComponent {
+  #tableService = inject(UserTableService);
 
-  // Public observables for the table template
-  data$: Observable<any[]> = this.#dataSubject.asObservable();
+  @Output() editEvent = new EventEmitter<User>();
+  @Output() deleteEvent = new EventEmitter<User>();
+
+  data$: Observable<User[]> = this.#tableService.data$;
   columns$: Observable<{ key: string; header: string }[]> =
-    this.#columnsSubject.asObservable();
-  hasActions$: Observable<boolean> = this.#hasActionsSubject.asObservable();
+    this.#tableService.columns$;
+  displayedColumns$: Observable<string[]> =
+    this.#tableService.displayedColumns$;
+  hasActions$: Observable<boolean> = this.#tableService.hasActions$;
 
-  displayedColumns$: Observable<string[]>;
-
-  // Input setters with BehaviorSubjects
+  // Input setters call the service methods to update state
   @Input() set data(value: User[] | null) {
-    this.#dataSubject.next(value || []);
+    this.#tableService.setData(value || []);
   }
 
   @Input() set columns(value: { key: string; header: string }[]) {
-    this.#columnsSubject.next(value || []);
+    this.#tableService.setColumns(value || []);
   }
 
   @Input() set hasActions(value: boolean) {
-    this.#hasActionsSubject.next(value || false);
+    this.#tableService.setHasActions(value);
   }
 
-  
-
-  constructor() {
-
-    this.displayedColumns$ = combineLatest([
-      this.#columnsSubject,
-      this.#hasActionsSubject,
-    ]).pipe(
-      map(([columns, hasActions]) => {
-        const columnKeys = columns.map((col) => col.key);
-        return hasActions ? [...columnKeys, "actions"] : columnKeys;
-      })
-    );
+  onEdit(row: User): void {
+    this.editEvent.emit(row);
   }
 
-  
-
-  onEdit(row: any): void {
-    console.log("Edit:", row);
-    // Trigger edit logic or emit an event
-  }
-
-  onDelete(row: any): void {
-    console.log("Delete:", row);
-    // Trigger delete logic or emit an event
+  onDelete(row: User): void {
+    this.deleteEvent.emit(row);
   }
 }
