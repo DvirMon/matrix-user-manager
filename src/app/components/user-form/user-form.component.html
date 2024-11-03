@@ -1,1 +1,73 @@
-<p>user-form works!</p>
+<form [formGroup]="userForm" class="user-form">
+  <section class="form-header">
+    <h2>{{ isEditMode ? "Edit User" : "Add User" }}</h2>
+  </section>
+
+  <div class="form-row">
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>First Name</mat-label>
+      <input matInput autocomplete="off" formControlName="firstName" required />
+    </mat-form-field>
+
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Last Name</mat-label>
+      <input matInput autocomplete="off" formControlName="lastName" required />
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Age</mat-label>
+      <input
+        matInput
+        autocomplete="off"
+        type="number"
+        formControlName="age"
+        required />
+    </mat-form-field>
+
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Gender</mat-label>
+      <mat-select formControlName="gender" required>
+        <mat-option value="female">Female</mat-option>
+        <mat-option value="male">Male</mat-option>
+        <mat-option value="other">Other</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Country</mat-label>
+      <input
+        matInput
+        autocomplete="off"
+        formControlName="country"
+        [matAutocomplete]="auto"
+        required />
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let country of filteredCountries | async"
+          [value]="country">
+          {{ country }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>City</mat-label>
+      <input matInput autocomplete="off" formControlName="city" required />
+    </mat-form-field>
+  </div>
+
+  <div class="dialog-actions">
+    <button mat-button mat-dialog-close>Close</button>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="userForm.invalid"
+      (click)="onSave()">
+      Save
+    </button>
+  </div>
+</form>

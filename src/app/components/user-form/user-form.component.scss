@@ -1,0 +1,41 @@
+.user-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 500px;
+  padding: 16px;
+
+  .form-header {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 16px;
+
+    h2 {
+      font-weight: 500;
+      font-size: 1.5rem;
+    }
+  }
+
+  .form-row {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    margin-bottom: 16px;
+
+    .form-field {
+      flex: 1; // Makes each field take equal space in the row
+    }
+  }
+
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    margin-top: 16px;
+
+    button {
+      min-width: 80px;
+    }
+  }
+}
