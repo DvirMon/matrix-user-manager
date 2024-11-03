@@ -18,7 +18,7 @@ export class UserTableComponent  {
   
   #dataSubject = new BehaviorSubject<User[]>([]);
   #columnsSubject = new BehaviorSubject<{ key: string; header: string }[]>([]);
-  #hasActionsSubject = new BehaviorSubject<boolean>(false);
+  #hasActionsSubject = new BehaviorSubject<boolean>(true);
 
   // Public observables for the table template
   data$: Observable<any[]> = this.#dataSubject.asObservable();
