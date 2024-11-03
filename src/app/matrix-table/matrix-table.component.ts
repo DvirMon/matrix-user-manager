@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-user-table',
+  selector: 'app-matrix-table',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './user-table.component.html',
-  styleUrls: ['./user-table.component.scss']
+  templateUrl: './matrix-table.component.html',
+  styleUrls: ['./matrix-table.component.scss']
 })
-export class UserTableComponent implements OnInit {
+export class MatrixTableComponent implements OnInit {
 
   constructor() { }
 

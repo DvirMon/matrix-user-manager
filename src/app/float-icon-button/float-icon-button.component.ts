@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-user-table',
+  selector: 'app-float-icon-button',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './user-table.component.html',
-  styleUrls: ['./user-table.component.scss']
+  templateUrl: './float-icon-button.component.html',
+  styleUrls: ['./float-icon-button.component.scss']
 })
-export class UserTableComponent implements OnInit {
+export class FloatIconButtonComponent implements OnInit {
 
   constructor() { }
 

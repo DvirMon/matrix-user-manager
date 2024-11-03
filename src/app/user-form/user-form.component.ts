@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-user-table',
+  selector: 'app-user-form',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './user-table.component.html',
-  styleUrls: ['./user-table.component.scss']
+  templateUrl: './user-form.component.html',
+  styleUrls: ['./user-form.component.scss']
 })
-export class UserTableComponent implements OnInit {
+export class UserFormComponent implements OnInit {
 
   constructor() { }
 
