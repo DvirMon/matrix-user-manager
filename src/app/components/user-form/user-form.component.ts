@@ -41,7 +41,7 @@ export class UserFormComponent implements OnInit {
 
   #fbn = inject(NonNullableFormBuilder);
 
-  dialogRef: MatDialogRef<UserDialogComponent> = inject(MatDialogRef);
+  // dialogRef: MatDialogRef<UserDialogComponent> = inject(MatDialogRef);
   #userFormService = inject(UserFormService);
 
 
@@ -55,10 +55,10 @@ export class UserFormComponent implements OnInit {
 
   onSave(): void {
     // Logic for handling save
-    this.dialogRef.close(true);
+    // this.dialogRef.close(true);
   }
 
   onCancel(): void {
-    this.dialogRef.close(false);
+    // this.dialogRef.close(false);
   }
 }
