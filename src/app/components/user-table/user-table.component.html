@@ -1,7 +1,6 @@
 <div class="table-container">
   <ng-container *ngIf="data$ | async as data">
     <table mat-table [dataSource]="data" class="mat-elevation-z8">
-      <!-- Dynamic Column Definitions -->
       <ng-container
         *ngFor="let column of columns$ | async"
         [matColumnDef]="column.key">
@@ -26,5 +25,9 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns$ | async"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns$ | async"></tr>
     </table>
+
+    <ng-container *ngIf="data.length === 0">
+      <p>No Users</p>
+    </ng-container>
   </ng-container>
 </div>

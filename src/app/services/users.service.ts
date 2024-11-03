@@ -7,26 +7,7 @@ import { User } from "../models/user";
   providedIn: "root",
 })
 export class UsersService {
-  #usersSubject = new BehaviorSubject<User[]>([
-    {
-      id: 1,
-      age: 10,
-      city: "Tek aviv",
-      country: "hungary",
-      firstName: "Dvir",
-      gender: "female",
-      lastName: "Dom",
-    },
-    {
-      id: 2,
-      age: 22,
-      city: "Tek aviv",
-      country: "Isreal",
-      firstName: "Dvir",
-      gender: "female",
-      lastName: "Dom",
-    },
-  ]);
+  #usersSubject = new BehaviorSubject<User[]>([]);
   #users$ = this.#usersSubject.asObservable();
 
   constructor() {}
@@ -57,7 +38,6 @@ export class UsersService {
   editUser(userId: number, updatedUserData: Partial<User>): void {
     const currentUsers = this.#usersSubject.getValue();
     const index = currentUsers.findIndex((user) => user.id === userId);
-
 
     if (index !== -1) {
       currentUsers[index] = { ...currentUsers[index], ...updatedUserData };
