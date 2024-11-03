@@ -1,4 +1,5 @@
 <app-float-icon-button (clickEvent)="onClickEvent()"></app-float-icon-button>
-<app-user-form [user]="user[0]"></app-user-form>
 
-<pre> {{ user | json }}</pre>
+<pre> {{ users$ | async | json }}</pre>
+
+<ng-container *ngIf="addEvent$ | async"></ng-container>

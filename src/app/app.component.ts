@@ -1,9 +1,11 @@
+import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { UserDialogService } from "./components/user-dialog/user-dialog.service";
 import { UserFormComponent } from "./components/user-form/user-form.component";
-import { FloatIconButtonComponent } from "./shared/float-icon-button/float-icon-button.component";
 import { User } from "./models/user";
-import { CommonModule } from "@angular/common";
+import { FloatIconButtonComponent } from "./shared/float-icon-button/float-icon-button.component";
+import { UsersService } from "./services/users.service";
+import { filter, Observable, Subject, switchMap, takeUntil, tap } from "rxjs";
 
 @Component({
   selector: "app-root",
@@ -13,18 +15,31 @@ import { CommonModule } from "@angular/common";
   styleUrls: ["./app.component.scss"],
 })
 export class AppComponent {
-  user: User[] = [{
-    age: 10,
-    city: "Tek aviv",
-    country: "hungary",
-    firstName: "Dvir",
-    gender: "female",
-    lastName: "Dom",
-  }];
-
   #dialogService = inject(UserDialogService);
 
+  #userService = inject(UsersService);
+
+  users$ = this.#userService.getUsers$();
+
+  addSubject = new Subject<void>();
+
+  addEvent$: Observable<User>;
+
+  constructor() {
+    this.addEvent$ = this.addSubject.asObservable().pipe(
+      switchMap(() =>
+        this.#dialogService
+          .open({ mode: "add", user: this.#userService.getUsers()[0] })
+          .afterClosed()
+          .pipe(
+            filter((user) => user !== null),
+            tap((user: User) => this.#userService.editUser(user.id, user))
+          )
+      )
+    );
+  }
+
   onClickEvent(): void {
-    this.#dialogService.open({ mode: "add", user: null });
+    this.addSubject.next();
   }
 }

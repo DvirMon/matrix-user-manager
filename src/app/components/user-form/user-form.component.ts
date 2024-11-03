@@ -2,9 +2,11 @@ import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   inject,
   Input,
   OnInit,
+  Output,
 } from "@angular/core";
 import {
   FormGroup,
@@ -28,6 +30,8 @@ import {
   Subject,
   switchMap,
 } from "rxjs";
+import { MatDialogRef } from "@angular/material/dialog";
+import { UserDialogComponent } from "../user-dialog/user-dialog.component";
 
 @Component({
   selector: "app-user-form",
@@ -48,7 +52,10 @@ import {
 })
 export class UserFormComponent implements OnInit {
   @Input() user: Partial<User> | undefined = {};
+
+  
   userForm!: FormGroup;
+  filteredCountries$!: Observable<string[]>;
 
   #inputSubject = new Subject<string>();
 
@@ -56,10 +63,8 @@ export class UserFormComponent implements OnInit {
 
   #countriesService = inject(CountriesService);
 
-  // dialogRef: MatDialogRef<UserDialogComponent> = inject(MatDialogRef);
+  dialogRef: MatDialogRef<UserDialogComponent> = inject(MatDialogRef);
   #userFormService = inject(UserFormService);
-
-  filteredCountries$!: Observable<string[]>;
 
   ngOnInit(): void {
     this.userForm = this.#userFormService.createUserForm(this.user, this.#fbn);
@@ -78,11 +83,13 @@ export class UserFormComponent implements OnInit {
 
   onSave(): void {
     // Logic for handling save
-    // this.dialogRef.close(true);
+
+    const updateUser = { ...this.user, ...this.userForm.value };
+    this.dialogRef.close(updateUser);
   }
 
   onCancel(): void {
-    // this.dialogRef.close(false);
+    this.dialogRef.close(null);
   }
 
   onInputChanged(event: Event): void {
