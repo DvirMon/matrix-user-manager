@@ -52,7 +52,7 @@ export class AppComponent {
           .afterClosed()
           .pipe(
             filter((user) => user !== null),
-            tap((user: User) => this.#userService.editUser(user.id, user))
+            tap((user: User) => this.#userService.addUser(user))
           )
       )
     );
