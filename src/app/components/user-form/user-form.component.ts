@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from "@angular/core";
 import {
   FormGroup,
   FormsModule,
@@ -30,6 +30,7 @@ import { MatSelectModule } from "@angular/material/select";
   ],
   templateUrl: "./user-form.component.html",
   styleUrls: ["./user-form.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserFormComponent implements OnInit {
   @Input() user: Partial<User> = {};

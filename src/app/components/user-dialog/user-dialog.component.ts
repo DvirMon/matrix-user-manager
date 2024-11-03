@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
+import { UserFormComponent } from "../user-form/user-form.component";
 
 @Component({
-  selector: 'app-user-dialog',
+  selector: "app-user-dialog",
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './user-dialog.component.html',
-  styleUrls: ['./user-dialog.component.scss']
+  imports: [CommonModule, MatDialogModule, UserFormComponent],
+  templateUrl: "./user-dialog.component.html",
+  styleUrls: ["./user-dialog.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserDialogComponent implements OnInit {
+export class UserDialogComponent  {
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  data = inject(MAT_DIALOG_DATA);
 
 }
