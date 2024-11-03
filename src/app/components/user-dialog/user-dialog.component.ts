@@ -1,27 +1,18 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from "@angular/core";
 import { CommonModule } from "@angular/common";
-import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef,
-} from "@angular/material/dialog";
-import { UserFormComponent } from "../user-form/user-form.component";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { User } from "src/app/models/user";
+import { UserFormComponent } from "../user-form/user-form.component";
 
 export interface UserDialogData {
-  user?: User; // Optional user data for editing
-  mode?: "add" | "edit"; // Mode can be 'add' or 'edit'
+  user: User | undefined;
+  mode: "add" | "edit";
 }
 
 @Component({
   selector: "app-user-dialog",
   standalone: true,
-  imports: [CommonModule, MatDialogModule, UserFormComponent],
+  imports: [CommonModule, UserFormComponent],
   templateUrl: "./user-dialog.component.html",
   styleUrls: ["./user-dialog.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

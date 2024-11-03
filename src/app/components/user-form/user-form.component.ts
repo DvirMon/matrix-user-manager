@@ -14,6 +14,8 @@ import { MatInputModule } from "@angular/material/input";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
 import { MatSelectModule } from "@angular/material/select";
+import { MatDialogRef } from "@angular/material/dialog";
+import { UserDialogComponent } from "../user-dialog/user-dialog.component";
 
 @Component({
   selector: "app-user-form",
@@ -40,11 +42,24 @@ export class UserFormComponent implements OnInit {
 
   #fbn = inject(NonNullableFormBuilder);
 
+  dialogRef: MatDialogRef<UserDialogComponent> = inject(MatDialogRef);
   #userFormService = inject(UserFormService);
 
+
   ngOnInit(): void {
+
     this.userForm = this.#userFormService.createUserForm(this.user, this.#fbn);
   }
 
-  onSave(): void {}
+  
+
+
+  onSave(): void {
+    // Logic for handling save
+    this.dialogRef.close(true);
+  }
+
+  onCancel(): void {
+    this.dialogRef.close(false);
+  }
 }
