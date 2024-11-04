@@ -25,6 +25,13 @@ th.mat-header-cell {
   text-align: left;
 }
 
-.mat-icon-button {
-  margin: 0 4px;
+.no-users-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #cccccc;
+  font-size: 1.2rem;
+  font-weight: 600;
+  height: 200px;
+  text-align: center;
 }

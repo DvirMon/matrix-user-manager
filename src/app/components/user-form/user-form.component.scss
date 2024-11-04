@@ -27,4 +27,16 @@
       min-width: 80px;
     }
   }
+
+  /* Media query for mobile devices */
+  @media (max-width: 600px) {
+    .form-row {
+      flex-direction: column; /* Stack form fields vertically */
+      gap: 8px;
+    }
+
+    .form-actions {
+      justify-content: center;
+    }
+  }
 }
