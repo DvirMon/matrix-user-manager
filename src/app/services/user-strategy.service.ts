@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { filter, map, Observable, of, Subject, switchMap, tap } from "rxjs";
+import { filter, map, Observable, of } from "rxjs";
 import { UserDialogService } from "../components/user-dialog/user-dialog.service";
 import { User } from "../models/user";
 import { UsersService } from "./users.service";
@@ -13,8 +13,6 @@ export enum ActionType {
   providedIn: "root",
 })
 export class UserStrategyService {
-  #strategySubject = new Subject<{ type: ActionType; user: User | null }>();
-
   #strategyMap = new Map<ActionType, (user: User) => Observable<void>>();
 
   #userService = inject(UsersService);
@@ -39,8 +37,14 @@ export class UserStrategyService {
     });
   }
 
-  getUsers$(): Observable<User[]> {
-    return this.#userService.getUsers$();
+  execute(type: ActionType, user: User): Observable<void> {
+    const strategy = this.#strategyMap.get(type);
+    if (strategy) {
+      return strategy(user);
+    } else {
+      console.warn(`No strategy found for action type: ${type}`);
+      return of(); 
+    }
   }
 
   #openDialogThenExecute(
@@ -52,27 +56,5 @@ export class UserStrategyService {
       filter((result) => result !== null),
       map((result: User) => action(result))
     );
-  }
-
-  #execute(type: ActionType, user: User | null): Observable<void> {
-    const strategy = this.#strategyMap.get(type);
-
-    if (strategy) {
-      return strategy(user!); // Call the strategy if it exists
-    } else {
-      console.warn(`No strategy found for action type: ${type}`);
-      return of(); // Return a completed observable if no strategy is found
-    }
-  }
-
-  emitStrategy(data: { type: ActionType; user: User | null }): void {
-    const { type, user } = data;
-    this.#strategySubject.next({ type, user });
-  }
-
-  getStrategy(): Observable<void> {
-    return this.#strategySubject
-      .asObservable()
-      .pipe(switchMap(({ type, user }) => this.#execute(type, user)));
   }
 }

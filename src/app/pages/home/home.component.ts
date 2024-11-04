@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 import { UserFormComponent } from "src/app/components/user-form/user-form.component";
 import { UserTableComponent } from "src/app/components/user-table/user-table.component";
 import { User } from "src/app/models/user";
+import { UserManagerService } from "src/app/services/user-manager.service";
 import {
   ActionType,
   UserStrategyService,
@@ -28,9 +29,9 @@ import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-  #userStrategyService = inject(UserStrategyService);
+  #userManageService = inject(UserManagerService);
 
-  users$ = this.#userStrategyService.getUsers$();
+  users$ = this.#userManageService.getUsers$();
 
   // trigger logic in the template
   strategyTrigger$: Observable<void>;
@@ -45,21 +46,21 @@ export class HomeComponent {
   ];
 
   constructor() {
-    this.strategyTrigger$ = this.#userStrategyService.getStrategy();
+    this.strategyTrigger$ = this.#userManageService.executeStrategy();
   }
 
   onClickEvent(): void {
-    this.#userStrategyService.emitStrategy({
+    this.#userManageService.emitStrategy({
       type: ActionType.ADD,
       user: null,
     });
   }
 
   onEditTableEvent(user: User): void {
-    this.#userStrategyService.emitStrategy({ type: ActionType.EDIT, user });
+    this.#userManageService.emitStrategy({ type: ActionType.EDIT, user });
   }
 
   onDeleteEditEvent(user: User): void {
-    this.#userStrategyService.emitStrategy({ type: ActionType.DELETE, user });
+    this.#userManageService.emitStrategy({ type: ActionType.DELETE, user });
   }
 }
