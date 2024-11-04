@@ -64,37 +64,28 @@ src/
 │   ├── user-dialog/                  # Dialog component for add/edit user
 │   │   ├── user-dialog.component.html
 │   │   ├── user-dialog.component.scss
-│   │   ├── user-dialog.component.spec.ts
 │   │   ├── user-dialog.component.ts
-│   │   ├── user-dialog.service.spec.ts
 │   │   └── user-dialog.service.ts
 │   ├── user-form/                    # Form component for user details
 │   │   ├── user-form.component.html
 │   │   ├── user-form.component.scss
-│   │   ├── user-form.component.spec.ts
 │   │   ├── user-form.component.ts
 │   │   └── user-form.service.ts
 │   └── user-table/                   # Table component for displaying users
 │       ├── user-table.component.html
 │       ├── user-table.component.scss
-│       ├── user-table.component.spec.ts
 │       ├── user-table.component.ts
-│       ├── user-table.service.spec.ts
 │       └── user-table.service.ts
 ├── models/                           # Data models
 │   └── user.ts                       # User model definition
 ├── services/                         # Shared services
 │   ├── countries.service.spec.ts     # Countries service test
 │   ├── countries.service.ts          # Countries data service
-│   ├── users.service.spec.ts         # Users service test
 │   └── users.service.ts              # User data service
 └── shared/                           # Shared components and utilities
     └── float-icon-button/            # Floating icon button component
-        ├── float-icon-button.component.html
         ├── float-icon-button.component.scss
-        ├── float-icon-button.component.spec.ts
         └── float-icon-button.component.ts
-
 ```
 
 ## Usage
