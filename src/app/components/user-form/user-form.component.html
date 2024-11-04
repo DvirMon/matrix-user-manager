@@ -74,9 +74,9 @@
         autocomplete="new-password"
         formControlName="city"
         required />
-        <mat-error *ngIf="messages$ | async as messages">
-          {{ messages["city"] }}
-        </mat-error>
+      <mat-error *ngIf="messages$ | async as messages">
+        {{ messages["city"] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -91,3 +91,5 @@
     </button>
   </div>
 </form>
+
+<ng-container *ngIf="validCountries$ | async"></ng-container>
