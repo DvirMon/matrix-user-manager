@@ -1,4 +1,4 @@
-<main>
+<!-- <main>
   <div class="table-container">
     <app-user-table
       [data]="users$ | async"
@@ -10,4 +10,5 @@
 <app-float-icon-button (clickEvent)="onClickEvent()"></app-float-icon-button>
 
 <ng-container *ngIf="addEvent$ | async"></ng-container>
-<ng-container *ngIf="editEvent$ | async"></ng-container>
+<ng-container *ngIf="editEvent$ | async"></ng-container> -->
+<router-outlet></router-outlet>
