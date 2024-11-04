@@ -120,7 +120,6 @@ export class UserFormComponent implements OnInit {
   }
 
   onCountryChanged(event: Event): void {
-    console.log(event)
     const input = (event.target as HTMLInputElement).value;
     this.#countryValueSubject.next(input);
   }
