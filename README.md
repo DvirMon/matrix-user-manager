@@ -2,7 +2,6 @@
 # User Management System
 
 ![Angular Version](https://img.shields.io/badge/Angular-14-blue)
-![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)
 
 > A reactive user management system built with Angular, RxJS, and SCSS.
 
