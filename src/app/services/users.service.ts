@@ -28,7 +28,6 @@ export class UsersService {
     const currentUsers = this.#usersSubject.getValue();
     const userWithId = { ...user, id: uuidv4() };
     const updatedUsers = [userWithId, ...currentUsers];
-    // this.#usersSubject.next(updatedUsers);
     this.#updateUsers([...updatedUsers]);
   }
 
@@ -38,7 +37,6 @@ export class UsersService {
 
     if (index !== -1) {
       currentUsers.splice(index, 1);
-      // this.#usersSubject.next([...currentUsers]);
       this.#updateUsers([...currentUsers]);
     }
   }
@@ -51,7 +49,6 @@ export class UsersService {
 
     if (index !== -1) {
       currentUsers[index] = { ...currentUsers[index], ...updatedUserData };
-      // this.#usersSubject.next([...currentUsers]);
       this.#updateUsers([...currentUsers]);
     }
   }
