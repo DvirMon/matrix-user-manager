@@ -3,6 +3,7 @@ import { filter, map, Observable, of } from "rxjs";
 import { UserDialogService } from "../components/user-dialog/user-dialog.service";
 import { User } from "../models/user";
 import { UsersService } from "./users.service";
+import { HttpStorageService } from "./http-storage.service";
 
 export enum ActionType {
   ADD = "add",
@@ -15,7 +16,7 @@ export enum ActionType {
 export class UserStrategyService {
   #strategyMap = new Map<ActionType, (user: User) => Observable<void>>();
 
-  #userService = inject(UsersService);
+  #userService = inject(HttpStorageService);
   #dialogService = inject(UserDialogService);
 
   constructor() {
@@ -32,8 +33,7 @@ export class UserStrategyService {
       )
     );
     this.#strategyMap.set(ActionType.DELETE, (user: User) => {
-      this.#userService.deleteUser(user.id);
-      return of();
+      return this.#userService.deleteUser(user.id);
     });
   }
 
@@ -43,7 +43,7 @@ export class UserStrategyService {
       return strategy(user);
     } else {
       console.warn(`No strategy found for action type: ${type}`);
-      return of(); 
+      return of();
     }
   }
 
