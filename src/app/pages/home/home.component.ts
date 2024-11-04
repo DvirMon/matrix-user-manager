@@ -1,11 +1,15 @@
-import { AsyncPipe, CommonModule, NgIf } from "@angular/common";
-import { Component, inject } from "@angular/core";
+import { AsyncPipe, NgIf } from "@angular/common";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { filter, Observable, Subject, switchMap, tap } from "rxjs";
-import { UserDialogService } from "src/app/components/user-dialog/user-dialog.service";
+import { Observable } from "rxjs";
 import { UserFormComponent } from "src/app/components/user-form/user-form.component";
 import { UserTableComponent } from "src/app/components/user-table/user-table.component";
 import { User } from "src/app/models/user";
+import { UserManagerService } from "src/app/services/user-manager.service";
+import {
+  ActionType,
+  UserStrategyService,
+} from "src/app/services/user-strategy.service";
 import { UsersService } from "src/app/services/users.service";
 import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float-icon-button.component";
 
@@ -22,19 +26,15 @@ import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float
   ],
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-  #dialogService = inject(UserDialogService);
+  #userManageService = inject(UserManagerService);
 
-  #userService = inject(UsersService);
+  users$ = this.#userManageService.getUsers$();
 
-  users$ = this.#userService.getUsers$();
-
-  addSubject = new Subject<void>();
-  editSubject = new Subject<User>();
-
-  addEvent$: Observable<User>;
-  editEvent$: Observable<User>;
+  // trigger logic in the template
+  strategyTrigger$: Observable<void>;
 
   columns = [
     { key: "firstName", header: "First Name" },
@@ -46,47 +46,21 @@ export class HomeComponent {
   ];
 
   constructor() {
-    this.addEvent$ = this.#onAddEvent();
-    this.editEvent$ = this.#onEditEvent();
-  }
-
-  #onAddEvent() {
-    return this.addSubject.asObservable().pipe(
-      switchMap(() =>
-        this.#dialogService
-          .open({ mode: "add", user: null })
-          .afterClosed()
-          .pipe(
-            filter((user) => user !== null),
-            tap((user: User) => this.#userService.addUser(user))
-          )
-      )
-    );
-  }
-
-  #onEditEvent() {
-    return this.editSubject.asObservable().pipe(
-      switchMap((user) =>
-        this.#dialogService
-          .open({ mode: "edit", user })
-          .afterClosed()
-          .pipe(
-            filter((user) => user !== null),
-            tap((user: User) => this.#userService.editUser(user.id, user))
-          )
-      )
-    );
+    this.strategyTrigger$ = this.#userManageService.executeStrategy();
   }
 
   onClickEvent(): void {
-    this.addSubject.next();
+    this.#userManageService.emitStrategy({
+      type: ActionType.ADD,
+      user: null,
+    });
   }
 
   onEditTableEvent(user: User): void {
-    this.editSubject.next(user);
+    this.#userManageService.emitStrategy({ type: ActionType.EDIT, user });
   }
 
   onDeleteEditEvent(user: User): void {
-    this.#userService.deleteUser(user.id);
+    this.#userManageService.emitStrategy({ type: ActionType.DELETE, user });
   }
 }
