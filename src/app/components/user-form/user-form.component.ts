@@ -7,6 +7,7 @@ import {
   Input,
   OnInit,
   Output,
+  Provider,
 } from "@angular/core";
 import {
   FormGroup,
@@ -36,6 +37,7 @@ import {
 import { MatDialogRef } from "@angular/material/dialog";
 import { UserDialogComponent } from "../user-dialog/user-dialog.component";
 import { FormErrorService } from "src/app/services/form-error.service";
+import { provideFormMessageManger } from "src/app/services/messages-error.service";
 
 @Component({
   selector: "app-user-form",
@@ -53,6 +55,7 @@ import { FormErrorService } from "src/app/services/form-error.service";
   templateUrl: "./user-form.component.html",
   styleUrls: ["./user-form.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [FormErrorService, provideFormMessageManger()],
 })
 export class UserFormComponent implements OnInit {
   @Input() user: Partial<User> | undefined = {};

@@ -1,25 +1,13 @@
-import { Injectable } from "@angular/core";
+import { inject } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Observable } from "rxjs";
 import { map, shareReplay, startWith } from "rxjs/operators";
+import { MessageManager } from "./messages-manger.service";
 
-@Injectable({
-  providedIn: "root",
-})
 export class FormErrorService {
   messages$!: Observable<{ [key: string]: string }>;
 
-  #errorMessagesLookup = new Map<string, (field: string, error: any) => string>(
-    [
-      ["required", (field) => `${this.formatKey(field)} is required.`],
-      ["pattern", (field) => this.getPatternErrorMessage(field)],
-      [
-        "min",
-        (field, error) =>
-          `${this.formatKey(field)} must be at least ${error.min}.`,
-      ],
-    ]
-  );
+  #messageManager = inject(MessageManager);
 
   initializeErrorHandling(form: FormGroup): void {
     const errors$ = form.statusChanges.pipe(startWith(form.status)).pipe(
@@ -49,16 +37,14 @@ export class FormErrorService {
   } {
     return Object.entries(errors).reduce((messages, [key, controlErrors]) => {
       const firstErrorKey = Object.keys(controlErrors)[0];
-      const messageFn = this.#errorMessagesLookup.get(firstErrorKey);
-
-      // Generate message if a function exists in the lookup
-      if (messageFn) {
-        messages[key] = messageFn(key, controlErrors[firstErrorKey]);
-      }
+      messages[key] = this.#messageManager.getErrorMessage(
+        key,
+        firstErrorKey,
+        controlErrors[firstErrorKey]
+      );
       return messages;
     }, {} as { [key: string]: string });
   }
-
   formatKey(key: string): string {
     return key
       .replace(/([A-Z])/g, " $1")
