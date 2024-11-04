@@ -5,13 +5,12 @@ import {
   EventEmitter,
   inject,
   Input,
-  OnInit,
-  Output,
+  Output
 } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
-import { BehaviorSubject, Observable, combineLatest, map } from "rxjs";
+import { Observable } from "rxjs";
 import { User } from "src/app/models/user";
 import { UserTableService } from "./user-table.service";
 

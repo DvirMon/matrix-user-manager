@@ -7,10 +7,8 @@ import { UserTableComponent } from "src/app/components/user-table/user-table.com
 import { User } from "src/app/models/user";
 import { UserManagerService } from "src/app/services/user-manager.service";
 import {
-  ActionType,
-  UserStrategyService,
+  ActionType
 } from "src/app/services/user-strategy.service";
-import { UsersService } from "src/app/services/users.service";
 import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float-icon-button.component";
 
 @Component({

@@ -1,4 +1,4 @@
-import { AsyncPipe, CommonModule, NgFor, NgIf } from "@angular/common";
+import { AsyncPipe, NgFor, NgIf } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -23,11 +23,9 @@ import {
   debounceTime,
   distinctUntilChanged,
   Observable,
-  shareReplay,
-  startWith,
   Subject,
   switchMap,
-  tap,
+  tap
 } from "rxjs";
 import { User } from "src/app/models/user";
 import { CountriesService } from "src/app/services/countries.service";

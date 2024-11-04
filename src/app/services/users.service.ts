@@ -22,8 +22,6 @@ export class UsersService {
     return this.#users$;
   }
 
-/*************  ✨ Codeium Command ⭐  *************/
-/******  ab96abba-96de-4e6b-9a4d-e6d8bf645c40  *******/
   addUser(user: User): void {
     const currentUsers = this.#usersSubject.getValue();
     const userWithId = { ...user, id: uuidv4() };
