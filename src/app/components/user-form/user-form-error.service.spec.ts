@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MessagesErrorService } from './messages-error.service';
+import { UserFormErrorService } from './user-form-error.service';
 
-describe('MessagesErrorService', () => {
-  let service: MessagesErrorService;
+describe('UserFormErrorService', () => {
+  let service: UserFormErrorService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MessagesErrorService);
+    service = TestBed.inject(UserFormErrorService);
   });
 
   it('should be created', () => {

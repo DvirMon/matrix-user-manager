@@ -1,5 +1,5 @@
 import { inject } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { FormGroup, ValidationErrors } from "@angular/forms";
 import { Observable } from "rxjs";
 import { map, shareReplay, startWith } from "rxjs/operators";
 import { MessageManager } from "./messages-manger.service";
@@ -9,13 +9,24 @@ export class FormErrorService {
 
   #messageManager = inject(MessageManager);
 
-  initializeErrorHandling(form: FormGroup): void {
+  // initializeErrorHandling(form: FormGroup): void {
+  //   const errors$ = form.statusChanges.pipe(startWith(form.status)).pipe(
+  //     map(() => this.#getFormErrors(form)),
+  //     shareReplay(1)
+  //   );
+
+  //   this.messages$ = errors$.pipe(
+  //     map((errors) => this.#mapErrorsToMessages(errors)),
+  //     shareReplay(1)
+  //   );
+  // }
+  getMessages$(form: FormGroup): Observable<ValidationErrors> {
     const errors$ = form.statusChanges.pipe(startWith(form.status)).pipe(
       map(() => this.#getFormErrors(form)),
       shareReplay(1)
     );
 
-    this.messages$ = errors$.pipe(
+    return errors$.pipe(
       map((errors) => this.#mapErrorsToMessages(errors)),
       shareReplay(1)
     );

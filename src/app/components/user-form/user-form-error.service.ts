@@ -1,14 +1,14 @@
 import { Injectable, Provider } from "@angular/core";
-import { MessageManager } from "./messages-manger.service";
+import { MessageManager } from "src/app/services/messages-manger.service";
 
-export function provideFormMessageManger(): Provider {
-  return { provide: MessageManager, useClass: MessagesErrorService };
+export function provideUserMessageManger(): Provider {
+  return { provide: MessageManager, useClass: UserFormErrorService };
 }
 
 @Injectable({
   providedIn: "root",
 })
-export class MessagesErrorService extends MessageManager {
+export class UserFormErrorService extends MessageManager {
   #errorMessagesLookup = new Map<
     string,
     (field: string, errorValue?: any) => string
