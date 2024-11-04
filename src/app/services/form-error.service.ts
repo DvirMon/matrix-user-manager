@@ -5,8 +5,6 @@ import { distinctUntilChanged, map, shareReplay, tap } from "rxjs/operators";
 import { MessageManager } from "./messages-manger.service";
 
 export class FormErrorService {
-  messages$!: Observable<{ [key: string]: string }>;
-
   #messageManager = inject(MessageManager);
 
   getMessages$(form: FormGroup): Observable<ValidationErrors> {
@@ -17,7 +15,6 @@ export class FormErrorService {
 
     return errors$.pipe(
       map((errors) => this.#mapErrorsToMessages(errors)),
-      tap((messages) => console.log(messages)),
       shareReplay(1)
     );
   }
