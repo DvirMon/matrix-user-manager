@@ -5,7 +5,10 @@ import { Observable } from "rxjs";
 import { UserFormComponent } from "src/app/components/user-form/user-form.component";
 import { UserTableComponent } from "src/app/components/user-table/user-table.component";
 import { User } from "src/app/models/user";
-import { ActionType, UserStrategyService } from "src/app/services/user-strategy.service";
+import {
+  ActionType,
+  UserStrategyService,
+} from "src/app/services/user-strategy.service";
 import { UsersService } from "src/app/services/users.service";
 import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float-icon-button.component";
 
@@ -22,13 +25,12 @@ import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float
   ],
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
-  changeDetection : ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-  #userService = inject(UsersService);
   #userStrategyService = inject(UserStrategyService);
 
-  users$ = this.#userService.getUsers$();
+  users$ = this.#userStrategyService.getUsers$();
 
   // trigger logic in the template
   strategyTrigger$: Observable<void>;
@@ -58,6 +60,6 @@ export class HomeComponent {
   }
 
   onDeleteEditEvent(user: User): void {
-    this.#userService.deleteUser(user.id);
+    this.#userStrategyService.emitStrategy({ type: ActionType.DELETE, user });
   }
 }

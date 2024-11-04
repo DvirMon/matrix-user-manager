@@ -5,7 +5,8 @@ import { UserFormComponent } from "../user-form/user-form.component";
 
 export interface UserDialogData {
   user: User | null;
-  mode: "add" | "edit";
+  // mode: "add" | "edit";
+  mode: string;
 }
 
 @Component({

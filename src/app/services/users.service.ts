@@ -34,9 +34,11 @@ export class UsersService {
     }
   }
 
-  editUser(userId: string, updatedUserData: Partial<User>): void {
+  editUser(updatedUserData: Partial<User>): void {
     const currentUsers = this.#usersSubject.getValue();
-    const index = currentUsers.findIndex((user) => user.id === userId);
+    const index = currentUsers.findIndex(
+      (user) => user.id === updatedUserData.id
+    );
 
     if (index !== -1) {
       currentUsers[index] = { ...currentUsers[index], ...updatedUserData };
@@ -44,9 +46,5 @@ export class UsersService {
     }
   }
 
-  getUserById(userId: string): Observable<User | undefined> {
-    return this.#users$.pipe(
-      map((users) => users.find((user) => user.id === userId))
-    );
-  }
+
 }
