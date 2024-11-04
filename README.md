@@ -113,8 +113,6 @@ src/
 3. **Editing Users**: Use the edit icon next to a user entry to modify existing user information.
 4. **Deleting Users**: Click on the delete icon to remove a user from the database.
 
-This section explains how administrators can perform typical user management tasks within the application.
-
 ## Architecture and Design Patterns
 
 - **Facade Pattern**: `UserManagerService` provides a unified API for managing users.
