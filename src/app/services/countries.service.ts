@@ -30,7 +30,7 @@ export class CountriesService {
     return this.#fetchCountries().pipe(
       map((countries) =>
         countries.filter((country) =>
-          country.toLowerCase().includes(query.toLowerCase())
+          country.toLowerCase().startsWith(query.toLowerCase())
         )
       )
     );
