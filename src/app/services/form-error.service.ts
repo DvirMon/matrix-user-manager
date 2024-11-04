@@ -1,7 +1,7 @@
 import { inject } from "@angular/core";
 import { FormGroup, ValidationErrors } from "@angular/forms";
 import { Observable } from "rxjs";
-import { map, shareReplay, startWith } from "rxjs/operators";
+import { distinctUntilChanged, map, shareReplay, tap } from "rxjs/operators";
 import { MessageManager } from "./messages-manger.service";
 
 export class FormErrorService {
@@ -9,32 +9,29 @@ export class FormErrorService {
 
   #messageManager = inject(MessageManager);
 
-  // initializeErrorHandling(form: FormGroup): void {
-  //   const errors$ = form.statusChanges.pipe(startWith(form.status)).pipe(
-  //     map(() => this.#getFormErrors(form)),
-  //     shareReplay(1)
-  //   );
-
-  //   this.messages$ = errors$.pipe(
-  //     map((errors) => this.#mapErrorsToMessages(errors)),
-  //     shareReplay(1)
-  //   );
-  // }
   getMessages$(form: FormGroup): Observable<ValidationErrors> {
-    const errors$ = form.statusChanges.pipe(startWith(form.status)).pipe(
+    const errors$ = form.statusChanges.pipe(
       map(() => this.#getFormErrors(form)),
-      shareReplay(1)
+      distinctUntilChanged((prev, curr) => this.#areErrorsEqual(prev, curr)) // Custom comparison function
     );
 
     return errors$.pipe(
       map((errors) => this.#mapErrorsToMessages(errors)),
+      tap((messages) => console.log(messages)),
       shareReplay(1)
     );
   }
 
-  #getFormErrors(form: FormGroup): { [key: string]: any } {
-    const errors: { [key: string]: any } = {};
-    Object.keys(form.controls).forEach((key) => {
+  #areErrorsEqual(
+    prevErrors: ValidationErrors,
+    currErrors: ValidationErrors
+  ): boolean {
+    return JSON.stringify(prevErrors) === JSON.stringify(currErrors);
+  }
+
+  #getFormErrors(form: FormGroup): ValidationErrors {
+    const errors: ValidationErrors = {};
+    Object.keys(form.controls).forEach((key: string) => {
       const controlErrors = form.get(key)?.errors;
       if (controlErrors) {
         errors[key] = controlErrors;
@@ -43,7 +40,7 @@ export class FormErrorService {
     return errors;
   }
 
-  #mapErrorsToMessages(errors: { [key: string]: any }): {
+  #mapErrorsToMessages(errors: ValidationErrors): {
     [key: string]: string;
   } {
     return Object.entries(errors).reduce((messages, [key, controlErrors]) => {
@@ -55,20 +52,5 @@ export class FormErrorService {
       );
       return messages;
     }, {} as { [key: string]: string });
-  }
-  formatKey(key: string): string {
-    return key
-      .replace(/([A-Z])/g, " $1")
-      .replace(/^./, (str) => str.toUpperCase());
-  }
-
-  getPatternErrorMessage(field: string): string {
-    const patternMessages: { [key: string]: string } = {
-      firstName: "First Name can only contain letters and spaces.",
-      lastName: "Last Name can only contain letters and spaces.",
-      age: "Age must be a positive number.",
-      city: "City can only contain letters and spaces.",
-    };
-    return patternMessages[field] || `${this.formatKey(field)} is invalid.`;
   }
 }

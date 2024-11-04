@@ -23,6 +23,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   Observable,
+  shareReplay,
   startWith,
   Subject,
   switchMap,
@@ -95,9 +96,9 @@ export class UserFormComponent implements OnInit {
         if (countryControl) {
           countryControl.setValidators([
             Validators.required,
-            countryMatchValidator(countries), 
+            countryMatchValidator(countries),
           ]);
-          countryControl.updateValueAndValidity(); 
+          countryControl.updateValueAndValidity();
         }
       })
     );
