@@ -16,7 +16,7 @@
 
 ## Introduction
 
-This project is an Angular-based user management system developed as part of a technical interview assignment. The application allows for adding, editing, deleting, and displaying users, utilizing reactive programming principles with RxJS and advanced design patterns.
+This project is an Angular-based user management system developed as part of a technical interview assignment. The application is structured as a standalone Angular project with modular components, services, and models, allowing for easy scalability and maintainability. The application allows for adding, editing, deleting, and displaying users, utilizing reactive programming principles with RxJS and design patterns.
 
 ## Features
 
@@ -54,24 +54,47 @@ This project is an Angular-based user management system developed as part of a t
 
 ```
 src/
-├── app/
-│   ├── components/              # All reusable components
-│   │   ├── dynamic-table/       # Dynamic table component
-│   │   │   ├── dynamic-table.component.ts
-│   │   │   ├── dynamic-table.component.html
-│   │   │   └── dynamic-table.component.scss  # SCSS styling
-│   │   └── user-form/           # User form component for add/edit operations
-│   │       ├── user-form.component.ts
-│   │       ├── user-form.component.html
-│   │       └── user-form.component.scss     # SCSS styling
-│   ├── services/                # Angular services
-│   │   ├── user.service.ts      # Service for handling user data
-│   │   ├── user-strategy.service.ts # Implements strategy pattern for user actions
-│   │   └── user-facade.service.ts   # Facade service for user-related operations
-│   ├── models/                  # Models and types
-│   │   └── user.model.ts        # User model definition
-│   └── app.module.ts            # Main app module
-└── environments/                # Environment settings
+├── app.component.html                # Root app component template
+├── app.component.scss                # Root app component styling (SCSS)
+├── app.component.spec.ts             # Root app component test
+├── app.component.ts                  # Root app component logic
+├── app.config.ts                     # Application configuration
+├── app.routes.ts                     # Application routes
+├── components/                       # Core components
+│   ├── user-dialog/                  # Dialog component for add/edit user
+│   │   ├── user-dialog.component.html
+│   │   ├── user-dialog.component.scss
+│   │   ├── user-dialog.component.spec.ts
+│   │   ├── user-dialog.component.ts
+│   │   ├── user-dialog.service.spec.ts
+│   │   └── user-dialog.service.ts
+│   ├── user-form/                    # Form component for user details
+│   │   ├── user-form.component.html
+│   │   ├── user-form.component.scss
+│   │   ├── user-form.component.spec.ts
+│   │   ├── user-form.component.ts
+│   │   └── user-form.service.ts
+│   └── user-table/                   # Table component for displaying users
+│       ├── user-table.component.html
+│       ├── user-table.component.scss
+│       ├── user-table.component.spec.ts
+│       ├── user-table.component.ts
+│       ├── user-table.service.spec.ts
+│       └── user-table.service.ts
+├── models/                           # Data models
+│   └── user.ts                       # User model definition
+├── services/                         # Shared services
+│   ├── countries.service.spec.ts     # Countries service test
+│   ├── countries.service.ts          # Countries data service
+│   ├── users.service.spec.ts         # Users service test
+│   └── users.service.ts              # User data service
+└── shared/                           # Shared components and utilities
+    └── float-icon-button/            # Floating icon button component
+        ├── float-icon-button.component.html
+        ├── float-icon-button.component.scss
+        ├── float-icon-button.component.spec.ts
+        └── float-icon-button.component.ts
+
 ```
 
 ## Usage
