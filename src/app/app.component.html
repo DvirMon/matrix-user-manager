@@ -1,12 +1,2 @@
-<main>
-  <div class="table-container">
-    <app-user-table
-      [data]="users$ | async"
-      [columns]="columns"
-      (deleteEvent)="onDeleteEditEvent($event)"
-      (editEvent)="onEditTableEvent($event)"></app-user-table>
-  </div>
-</main>
-<app-float-icon-button (clickEvent)="onClickEvent()"></app-float-icon-button>
 
-<ng-container *ngIf="strategyEvent$ | async"></ng-container>
+<router-outlet></router-outlet>
