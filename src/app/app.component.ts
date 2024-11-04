@@ -7,6 +7,10 @@ import { FloatIconButtonComponent } from "./shared/float-icon-button/float-icon-
 import { UsersService } from "./services/users.service";
 import { filter, Observable, Subject, switchMap, takeUntil, tap } from "rxjs";
 import { UserTableComponent } from "./components/user-table/user-table.component";
+import {
+  ActionType,
+  UserStrategyService,
+} from "./services/user-strategy.service";
 
 @Component({
   selector: "app-root",
@@ -21,17 +25,12 @@ import { UserTableComponent } from "./components/user-table/user-table.component
   styleUrls: ["./app.component.scss"],
 })
 export class AppComponent {
-  #dialogService = inject(UserDialogService);
-
   #userService = inject(UsersService);
+  #userStrategyService = inject(UserStrategyService);
 
   users$ = this.#userService.getUsers$();
 
-  addSubject = new Subject<void>();
-  editSubject = new Subject<User>();
-
-  addEvent$: Observable<User>;
-  editEvent$: Observable<User>;
+  strategyEvent$: Observable<void>;
 
   columns = [
     { key: "firstName", header: "First Name" },
@@ -43,44 +42,18 @@ export class AppComponent {
   ];
 
   constructor() {
-    this.addEvent$ = this.#onAddEvent();
-    this.editEvent$ = this.#onEditEvent();
-  }
-
-  #onAddEvent() {
-    return this.addSubject.asObservable().pipe(
-      switchMap(() =>
-        this.#dialogService
-          .open({ mode: "add", user: null })
-          .afterClosed()
-          .pipe(
-            filter((user) => user !== null),
-            tap((user: User) => this.#userService.addUser(user))
-          )
-      )
-    );
-  }
-
-  #onEditEvent() {
-    return this.editSubject.asObservable().pipe(
-      switchMap((user) =>
-        this.#dialogService
-          .open({ mode: "edit", user })
-          .afterClosed()
-          .pipe(
-            filter((user) => user !== null),
-            tap((user: User) => this.#userService.editUser(user.id, user))
-          )
-      )
-    );
+    this.strategyEvent$ = this.#userStrategyService.getStrategy();
   }
 
   onClickEvent(): void {
-    this.addSubject.next();
+    this.#userStrategyService.emitStrategy({
+      type: ActionType.ADD,
+      user: null,
+    });
   }
 
   onEditTableEvent(user: User): void {
-    this.editSubject.next(user);
+    this.#userStrategyService.emitStrategy({ type: ActionType.EDIT, user });
   }
 
   onDeleteEditEvent(user: User): void {

@@ -15,9 +15,6 @@ export class UsersService {
   getUsers$(): Observable<User[]> {
     return this.#users$;
   }
-  getUsers(): User[] {
-    return this.#usersSubject.value;
-  }
 
   addUser(user: User): void {
     const currentUsers = this.#usersSubject.getValue();
