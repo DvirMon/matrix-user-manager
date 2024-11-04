@@ -77,14 +77,14 @@ export class UserFormComponent implements OnInit {
 
   messages$!: Observable<{ [key: string]: string }>;
 
-  validCountries$!: Observable<string[]>;
+  triggerValidCountries$!: Observable<string[]>;
 
   ngOnInit(): void {
     this.userForm = this.#userFormService.createUserForm(this.user, this.#fbn);
 
-    this.validCountries$ = this.#setValidCountries();
+    this.triggerValidCountries$ = this.#setValidCountries();
 
-    this.filteredCountries$ = this.#getCountries(this.user?.country);
+    this.filteredCountries$ = this.#getCountries();
 
     this.messages$ = this.#formErrorService.getMessages$(this.userForm);
   }
@@ -104,11 +104,10 @@ export class UserFormComponent implements OnInit {
     );
   }
 
-  #getCountries(initialCountry: string | undefined): Observable<string[]> {
+  #getCountries(): Observable<string[]> {
     return this.#countryValueSubject.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      startWith(initialCountry || ""),
       switchMap((query) => this.#countriesService.filterCountries(query))
     );
   }
@@ -123,6 +122,7 @@ export class UserFormComponent implements OnInit {
   }
 
   onCountryChanged(event: Event): void {
+    console.log(event)
     const input = (event.target as HTMLInputElement).value;
     this.#countryValueSubject.next(input);
   }
