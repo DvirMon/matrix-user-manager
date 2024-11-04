@@ -36,8 +36,8 @@ This project is an Angular-based user management system developed as part of a t
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/your-project.git
-   cd your-project
+   https://github.com/DvirMon/matrix-user-manager.git
+   cd matrix-user-manager
    ```
 2. **Install dependencies**:
    ```bash
