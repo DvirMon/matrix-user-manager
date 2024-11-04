@@ -9,4 +9,4 @@
 </main>
 <app-float-icon-button (clickEvent)="onClickEvent()"></app-float-icon-button>
 
-<ng-container *ngIf="strategyEvent$ | async"></ng-container>
+<ng-container *ngIf="strategyTrigger$ | async"></ng-container>

@@ -1,5 +1,5 @@
 import { AsyncPipe, NgIf } from "@angular/common";
-import { Component, inject } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { Observable } from "rxjs";
 import { UserFormComponent } from "src/app/components/user-form/user-form.component";
@@ -22,6 +22,7 @@ import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float
   ],
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
+  changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent {
   #userService = inject(UsersService);
@@ -29,7 +30,8 @@ export class HomeComponent {
 
   users$ = this.#userService.getUsers$();
 
-  strategyEvent$: Observable<void>;
+  // trigger logic in the template
+  strategyTrigger$: Observable<void>;
 
   columns = [
     { key: "firstName", header: "First Name" },
@@ -41,7 +43,7 @@ export class HomeComponent {
   ];
 
   constructor() {
-    this.strategyEvent$ = this.#userStrategyService.getStrategy();
+    this.strategyTrigger$ = this.#userStrategyService.getStrategy();
   }
 
   onClickEvent(): void {
