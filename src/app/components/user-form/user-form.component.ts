@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+import { AsyncPipe, CommonModule, NgIf } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -37,7 +37,8 @@ import { UserFormService } from "./user-form.service";
   selector: "app-user-form",
   standalone: true,
   imports: [
-    CommonModule,
+    NgIf,
+    AsyncPipe,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -90,8 +91,6 @@ export class UserFormComponent implements OnInit {
   }
 
   onSave(): void {
-    // Logic for handling save
-
     const updateUser = { ...this.user, ...this.userForm.value };
     this.dialogRef.close(updateUser);
   }
