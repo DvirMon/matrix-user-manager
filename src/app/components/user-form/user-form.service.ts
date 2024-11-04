@@ -1,4 +1,4 @@
-import { inject, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { FormGroup, NonNullableFormBuilder, Validators } from "@angular/forms";
 import { User } from "src/app/models/user";
 
@@ -13,11 +13,11 @@ export class UserFormService {
     return fbn.group({
       firstName: [
         user.firstName || "",
-        [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)],
+        [Validators.required, Validators.pattern(/^[a-zA-Z\u0590-\u05FF\s]*$/)],
       ],
       lastName: [
         user.lastName || "",
-        [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)],
+        [Validators.required, Validators.pattern(/^[a-zA-Z\u0590-\u05FF\s]*$/)],
       ],
       age: [
         user.age || null,
@@ -29,7 +29,7 @@ export class UserFormService {
       ],
       city: [
         user.city || "",
-        [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)],
+        [Validators.required, Validators.pattern(/^[a-zA-Z\u0590-\u05FF\s]*$/)],
       ],
       gender: [user.gender || "", Validators.required],
       country: [user.country || "", Validators.required],

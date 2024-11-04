@@ -23,15 +23,19 @@ import { User } from "src/app/models/user";
 import { CountriesService } from "src/app/services/countries.service";
 import { UserFormService } from "./user-form.service";
 import {
+  combineLatest,
   debounceTime,
   distinctUntilChanged,
+  map,
   Observable,
+  shareReplay,
   startWith,
   Subject,
   switchMap,
 } from "rxjs";
 import { MatDialogRef } from "@angular/material/dialog";
 import { UserDialogComponent } from "../user-dialog/user-dialog.component";
+import { FormErrorService } from "src/app/services/form-error.service";
 
 @Component({
   selector: "app-user-form",
@@ -53,7 +57,6 @@ import { UserDialogComponent } from "../user-dialog/user-dialog.component";
 export class UserFormComponent implements OnInit {
   @Input() user: Partial<User> | undefined = {};
 
-  
   userForm!: FormGroup;
   filteredCountries$!: Observable<string[]>;
 
@@ -66,10 +69,19 @@ export class UserFormComponent implements OnInit {
   dialogRef: MatDialogRef<UserDialogComponent> = inject(MatDialogRef);
   #userFormService = inject(UserFormService);
 
+  #formErrorService = inject(FormErrorService);
+
+  errors$!: Observable<{ [key: string]: any }>;
+  messages$!: Observable<{ [key: string]: string }>;
+
   ngOnInit(): void {
     this.userForm = this.#userFormService.createUserForm(this.user, this.#fbn);
 
     this.filteredCountries$ = this.#setCountries(this.user?.country);
+
+    this.#formErrorService.initializeErrorHandling(this.userForm);
+
+    this.messages$ = this.#formErrorService.messages$;
   }
 
   #setCountries(initialCountry: string | undefined): Observable<string[]> {
