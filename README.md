@@ -1,7 +1,10 @@
 
 # User Management System
 
-> A dynamic, responsive user management system built with Angular, RxJS, and SCSS.
+![Angular Version](https://img.shields.io/badge/Angular-14-blue)
+![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)
+
+> A reactive user management system built with Angular, RxJS, and SCSS.
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -20,10 +23,13 @@ This project is an Angular-based user management system developed as part of a t
 
 ## Features
 
-- User management with add, edit, and delete functionality.
-- Responsive, dynamic table with Angular Material.
-- SCSS for modular, customizable styling.
-- Facade and Strategy design patterns for streamlined, modular architecture.
+- **User Management**: Supports add, edit, and delete functions for user records.
+- **Reusable Components**: Configurable components for easy reuse across the application.
+- **Reactive Form Validation**: Implements form validation with RxJS error messages.
+- **Local Storage**: Stores user data locally for offline access.
+- **Optimized Performance**: Uses OnPush change detection to reduce unnecessary updates.
+- **Responsive Form**: Mobile-friendly dialog form for a seamless experience.
+- **Design Patterns**: Facade and Strategy patterns for maintainable, flexible code.
 
 ## Technologies Used
 
@@ -54,52 +60,66 @@ This project is an Angular-based user management system developed as part of a t
 
 ```
 src/
-├── app.component.html                # Root app component template
-├── app.component.scss                # Root app component styling (SCSS)
-├── app.component.spec.ts             # Root app component test
-├── app.component.ts                  # Root app component logic
-├── app.config.ts                     # Application configuration
-├── app.routes.ts                     # Application routes
-├── components/                       # Core components
-│   ├── user-dialog/                  # Dialog component for add/edit user
-│   │   ├── user-dialog.component.html
-│   │   ├── user-dialog.component.scss
-│   │   ├── user-dialog.component.ts
-│   │   └── user-dialog.service.ts
-│   ├── user-form/                    # Form component for user details
-│   │   ├── user-form.component.html
-│   │   ├── user-form.component.scss
-│   │   ├── user-form.component.ts
-│   │   └── user-form.service.ts
-│   └── user-table/                   # Table component for displaying users
-│       ├── user-table.component.html
-│       ├── user-table.component.scss
-│       ├── user-table.component.ts
-│       └── user-table.service.ts
-├── models/                           # Data models
-│   └── user.ts                       # User model definition
-├── services/                         # Shared services
-│   ├── countries.service.spec.ts     # Countries service test
-│   ├── countries.service.ts          # Countries data service
-│   └── users.service.ts              # User data service
-└── shared/                           # Shared components and utilities
-    └── float-icon-button/            # Floating icon button component
+├── app.component.html
+├── app.component.scss
+├── app.component.ts
+├── app.config.ts
+├── app.routes.ts
+├── components
+│   ├── user-dialog
+│   │   ├── user-dialog.component.html
+│   │   ├── user-dialog.component.scss
+│   │   ├── user-dialog.component.ts
+│   │   └── user-dialog.service.ts
+│   ├── user-form
+│   │   ├── user-form.component.html
+│   │   ├── user-form.component.scss
+│   │   ├── user-form.component.ts
+│   │   ├── user-form-error.service.ts
+│   │   └── user-form.service.ts
+│   └── user-table
+│       ├── user-table.component.html
+│       ├── user-table.component.scss
+│       ├── user-table.component.ts
+│       └── user-table.service.ts
+├── models
+│   └── user.ts
+├── pages
+│   └── home
+│       ├── home.component.html
+│       ├── home.component.scss
+│       └── home.component.ts
+├── services
+│   ├── countries.service.spec.ts
+│   ├── countries.service.ts
+│   ├── form-error.service.ts
+│   ├── local-storage.service.ts
+│   ├── messages-manger.service.ts
+│   ├── user-manager.service.ts
+│   ├── users.service.spec.ts
+│   ├── users.service.ts
+│   └── user-strategy.service.ts
+└── shared
+    └── float-icon-button
         ├── float-icon-button.component.scss
         └── float-icon-button.component.ts
+
 ```
 
 ## Usage
 
-- **Add User**: Click "Add User" to open a dialog and submit the form.
-- **Edit User**: Click the edit icon next to a user to modify their details.
-- **Delete User**: Click the delete icon to remove a user from the list.
+1. **Viewing Users**: Navigate to the home page to see a list of all users.
+2. **Adding Users**: Click on the "+" button, fill in the user details, and submit the form.
+3. **Editing Users**: Use the edit icon next to a user entry to modify existing user information.
+4. **Deleting Users**: Click on the delete icon to remove a user from the database.
+
+This section explains how administrators can perform typical user management tasks within the application.
 
 ## Architecture and Design Patterns
 
-- **Facade Pattern**: `UserFacadeService` provides a unified API for managing users.
-- **Strategy Pattern**: `UserStrategyService` dynamically handles different user actions.
+- **Facade Pattern**: `UserManagerService` provides a unified API for managing users.
+- **Strategy Pattern**: `UserStrategyService` handles different user actions.
 - **Reactive Programming**: RxJS observables are used throughout for reactive data handling.
-- **SCSS**: Component-based SCSS styling ensures modular, maintainable, and customizable styling.
 
 ## Known Issues and Limitations
 
@@ -110,4 +130,4 @@ src/
 
 - **Backend Integration**: Add a REST API for data persistence.
 - **Unit Tests**: Add comprehensive test coverage.
-- **Advanced Filtering**: Enhance table with filtering, sorting, and pagination.
+- **Advanced Table**: Enhance table with filtering, sorting, and pagination.
