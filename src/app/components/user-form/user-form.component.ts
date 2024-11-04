@@ -1,4 +1,4 @@
-import { AsyncPipe, CommonModule, NgIf } from "@angular/common";
+import { AsyncPipe, CommonModule, NgFor, NgIf } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -38,6 +38,7 @@ import { UserFormService } from "./user-form.service";
   standalone: true,
   imports: [
     NgIf,
+    NgFor,
     AsyncPipe,
     FormsModule,
     ReactiveFormsModule,
