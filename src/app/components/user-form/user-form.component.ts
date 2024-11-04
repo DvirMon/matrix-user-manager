@@ -1,27 +1,24 @@
-import { CommonModule } from "@angular/common";
+import { AsyncPipe, CommonModule, NgFor, NgIf } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   inject,
   Input,
   OnInit,
-  Output,
 } from "@angular/core";
 import {
   FormGroup,
   FormsModule,
   NonNullableFormBuilder,
   ReactiveFormsModule,
+  Validators,
 } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
+import { MatDialogRef } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { User } from "src/app/models/user";
-import { CountriesService } from "src/app/services/countries.service";
-import { UserFormService } from "./user-form.service";
 import {
   debounceTime,
   distinctUntilChanged,
@@ -29,15 +26,22 @@ import {
   startWith,
   Subject,
   switchMap,
+  tap,
 } from "rxjs";
-import { MatDialogRef } from "@angular/material/dialog";
+import { User } from "src/app/models/user";
+import { CountriesService } from "src/app/services/countries.service";
+import { FormErrorService } from "src/app/services/form-error.service";
 import { UserDialogComponent } from "../user-dialog/user-dialog.component";
+import { provideUserMessageManger } from "./user-form-error.service";
+import { countryMatchValidator, UserFormService } from "./user-form.service";
 
 @Component({
   selector: "app-user-form",
   standalone: true,
   imports: [
-    CommonModule,
+    NgIf,
+    NgFor,
+    AsyncPipe,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -49,31 +53,58 @@ import { UserDialogComponent } from "../user-dialog/user-dialog.component";
   templateUrl: "./user-form.component.html",
   styleUrls: ["./user-form.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [FormErrorService, provideUserMessageManger()],
 })
 export class UserFormComponent implements OnInit {
   @Input() user: Partial<User> | undefined = {};
-
-  
-  userForm!: FormGroup;
-  filteredCountries$!: Observable<string[]>;
-
-  #inputSubject = new Subject<string>();
 
   #fbn = inject(NonNullableFormBuilder);
 
   #countriesService = inject(CountriesService);
 
-  dialogRef: MatDialogRef<UserDialogComponent> = inject(MatDialogRef);
   #userFormService = inject(UserFormService);
+
+  #formErrorService = inject(FormErrorService);
+
+  #dialogRef: MatDialogRef<UserDialogComponent> = inject(MatDialogRef);
+
+  #countryValueSubject = new Subject<string>();
+
+  userForm!: FormGroup;
+
+  filteredCountries$!: Observable<string[]>;
+
+  messages$!: Observable<{ [key: string]: string }>;
+
+  validCountries$!: Observable<string[]>;
 
   ngOnInit(): void {
     this.userForm = this.#userFormService.createUserForm(this.user, this.#fbn);
 
-    this.filteredCountries$ = this.#setCountries(this.user?.country);
+    this.validCountries$ = this.#setValidCountries();
+
+    this.filteredCountries$ = this.#getCountries(this.user?.country);
+
+    this.messages$ = this.#formErrorService.getMessages$(this.userForm);
   }
 
-  #setCountries(initialCountry: string | undefined): Observable<string[]> {
-    return this.#inputSubject.pipe(
+  #setValidCountries() {
+    return this.#countriesService.fetchCountries().pipe(
+      tap((countries) => {
+        const countryControl = this.userForm.get("country");
+        if (countryControl) {
+          countryControl.setValidators([
+            Validators.required,
+            countryMatchValidator(countries), 
+          ]);
+          countryControl.updateValueAndValidity(); 
+        }
+      })
+    );
+  }
+
+  #getCountries(initialCountry: string | undefined): Observable<string[]> {
+    return this.#countryValueSubject.pipe(
       debounceTime(300),
       distinctUntilChanged(),
       startWith(initialCountry || ""),
@@ -82,18 +113,16 @@ export class UserFormComponent implements OnInit {
   }
 
   onSave(): void {
-    // Logic for handling save
-
     const updateUser = { ...this.user, ...this.userForm.value };
-    this.dialogRef.close(updateUser);
+    this.#dialogRef.close(updateUser);
   }
 
   onCancel(): void {
-    this.dialogRef.close(null);
+    this.#dialogRef.close(null);
   }
 
-  onInputChanged(event: Event): void {
+  onCountryChanged(event: Event): void {
     const input = (event.target as HTMLInputElement).value;
-    this.#inputSubject.next(input);
+    this.#countryValueSubject.next(input);
   }
 }

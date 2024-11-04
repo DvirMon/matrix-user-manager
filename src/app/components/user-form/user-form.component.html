@@ -1,14 +1,19 @@
 <form [formGroup]="userForm" class="user-form">
-
   <div class="form-row">
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>First Name</mat-label>
       <input matInput autocomplete="off" formControlName="firstName" required />
+      <mat-error *ngIf="messages$ | async as messages">
+        {{ messages["firstName"] }}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>Last Name</mat-label>
       <input matInput autocomplete="off" formControlName="lastName" required />
+      <mat-error *ngIf="messages$ | async as messages">
+        {{ messages["lastName"] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -21,6 +26,9 @@
         type="number"
         formControlName="age"
         required />
+      <mat-error *ngIf="messages$ | async as messages">
+        {{ messages["age"] }}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field class="form-field" appearance="fill">
@@ -30,6 +38,9 @@
         <mat-option value="male">Male</mat-option>
         <mat-option value="other">Other</mat-option>
       </mat-select>
+      <mat-error *ngIf="messages$ | async as messages">
+        {{ messages["gender"] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -42,7 +53,7 @@
         autocomplete="new-password"
         formControlName="country"
         [matAutocomplete]="auto"
-        (input)="onInputChanged($event)"
+        (input)="onCountryChanged($event)"
         required />
       <mat-autocomplete #auto="matAutocomplete">
         <mat-option
@@ -51,11 +62,21 @@
           {{ country }}
         </mat-option>
       </mat-autocomplete>
+      <mat-error *ngIf="messages$ | async as messages">
+        {{ messages["country"] }}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>City</mat-label>
-      <input matInput autocomplete="new-password" formControlName="city" required />
+      <input
+        matInput
+        autocomplete="new-password"
+        formControlName="city"
+        required />
+      <mat-error *ngIf="messages$ | async as messages">
+        {{ messages["city"] }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -70,3 +91,5 @@
     </button>
   </div>
 </form>
+
+<ng-container *ngIf="validCountries$ | async"></ng-container>
