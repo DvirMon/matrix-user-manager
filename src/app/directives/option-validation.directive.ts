@@ -23,8 +23,8 @@ export class OptionValidationDirective {
   #validator: ValidatorFn | null = null;
 
   @Input("list")
-  set list(value: string[]) {
-    this.#validator = countryMatchValidator(value);
+  set list(value: string[] | null) {
+    this.#validator = countryMatchValidator(value as string[]);
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
