@@ -33,6 +33,7 @@ import { FormErrorService } from "src/app/services/form-error.service";
 import { UserDialogComponent } from "../user-dialog/user-dialog.component";
 import { provideUserMessageManger } from "./user-form-error.service";
 import { countryMatchValidator, UserFormService } from "./user-form.service";
+import { OptionValidationDirective } from "src/app/directives/option-validation.directive";
 
 @Component({
   selector: "app-user-form",
@@ -48,6 +49,7 @@ import { countryMatchValidator, UserFormService } from "./user-form.service";
     MatAutocompleteModule,
     MatSelectModule,
     MatButtonModule,
+    OptionValidationDirective
   ],
   templateUrl: "./user-form.component.html",
   styleUrls: ["./user-form.component.scss"],
