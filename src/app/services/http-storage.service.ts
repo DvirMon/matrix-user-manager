@@ -13,7 +13,7 @@ import { User } from "../models/user";
 @Injectable({
   providedIn: "root",
 })
-export class HttpStorageService {
+export class RemoteUsersService {
   readonly apiUrl = "http://localhost:3000/users";
   #reloadTrigger$ = new Subject<void>();
 

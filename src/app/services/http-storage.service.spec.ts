@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { HttpStorageService } from './http-storage.service';
+import { RemoteUsersService } from "./http-storage.service";
 
-describe('HttpStorageService', () => {
-  let service: HttpStorageService;
+describe("RemoteUsersService", () => {
+  let service: RemoteUsersService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(HttpStorageService);
+    service = TestBed.inject(RemoteUsersService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });
