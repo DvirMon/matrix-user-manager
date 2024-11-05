@@ -1,13 +1,13 @@
 import { TestBed } from "@angular/core/testing";
 
-import { RemoteUsersService } from "./http-storage.service";
+import { UsersLocalService } from "./users-local.service";
 
-describe("RemoteUsersService", () => {
-  let service: RemoteUsersService;
+describe("UsersLocalService", () => {
+  let service: UsersLocalService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(RemoteUsersService);
+    service = TestBed.inject(UsersLocalService);
   });
 
   it("should be created", () => {

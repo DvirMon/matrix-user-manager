@@ -7,7 +7,7 @@ import { LocalStorageService } from "./local-storage.service";
 @Injectable({
   providedIn: "root",
 })
-export class LocalUsersService {
+export class UsersLocalService {
   readonly STORAGE_KEY = "users";
 
   #localStorageService = inject(LocalStorageService);

@@ -1,4 +1,3 @@
-
 # User Management System
 
 ![Angular Version](https://img.shields.io/badge/Angular-14-blue)
@@ -6,6 +5,7 @@
 > A reactive user management system built with Angular, RxJS, and SCSS.
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Features](#features)
 3. [Technologies Used](#technologies-used)
@@ -114,7 +114,7 @@ src/
 
 ## Architecture and Design Patterns
 
-- **Facade Pattern**: `UserManagerService` provides a unified API for managing users.
+- **Facade Pattern**: `UsersManagerService` provides a unified API for managing users.
 - **Strategy Pattern**: `UserStrategyService` handles different user actions.
 - **Reactive Programming**: RxJS observables are used throughout for reactive data handling.
 
