@@ -23,6 +23,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   Observable,
+  shareReplay,
   Subject,
   switchMap,
   tap
@@ -82,7 +83,7 @@ export class UserFormComponent implements OnInit {
   ngOnInit(): void {
     this.userForm = this.#userFormService.createUserForm(this.user, this.#fbn);
 
-    this.triggerValidCountries$ = this.#setValidCountries();
+    // this.triggerValidCountries$ = this.#setValidCountries();
 
     this.filteredCountries$ = this.#getCountries();
 
@@ -108,7 +109,9 @@ export class UserFormComponent implements OnInit {
     return this.#countryValueSubject.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((query) => this.#countriesService.filterCountries(query))
+      switchMap((query) => this.#countriesService.filterCountries(query)),
+      tap(() => console.log('execute')),
+      shareReplay(1)
     );
   }
 
