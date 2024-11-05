@@ -125,6 +125,7 @@ src/
 
 ## Future Improvements
 
+- **Refactor Validation**: Valid countries list with dirctive.
 - **Backend Integration**: Add a REST API for data persistence.
 - **Unit Tests**: Add comprehensive test coverage.
 - **Advanced Table**: Enhance table with filtering, sorting, and pagination.
