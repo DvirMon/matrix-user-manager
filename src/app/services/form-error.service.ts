@@ -1,14 +1,19 @@
 import { inject } from "@angular/core";
 import { FormGroup, ValidationErrors } from "@angular/forms";
 import { Observable } from "rxjs";
-import { distinctUntilChanged, map, shareReplay } from "rxjs/operators";
+import {
+  distinctUntilChanged,
+  map,
+  shareReplay,
+  startWith,
+} from "rxjs/operators";
 import { MessageManager } from "./messages-manger.service";
 
 export class FormErrorService {
   #messageManager = inject(MessageManager);
 
   getMessages$(form: FormGroup): Observable<ValidationErrors> {
-    const errors$ = form.statusChanges.pipe(
+    const errors$ = form.statusChanges.pipe(startWith(form.status)).pipe(
       map(() => this.#getFormErrors(form)),
       distinctUntilChanged((prev, curr) => this.#areErrorsEqual(prev, curr))
     );
