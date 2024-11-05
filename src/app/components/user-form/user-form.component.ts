@@ -83,34 +83,17 @@ export class UserFormComponent implements OnInit {
   ngOnInit(): void {
     this.userForm = this.#userFormService.createUserForm(this.user, this.#fbn);
 
-    // this.triggerValidCountries$ = this.#setValidCountries();
-
     this.filteredCountries$ = this.#getCountries();
 
     this.messages$ = this.#formErrorService.getMessages$(this.userForm);
   }
 
-  #setValidCountries() {
-    return this.#countriesService.fetchCountries().pipe(
-      tap((countries) => {
-        const countryControl = this.userForm.get("country");
-        if (countryControl) {
-          countryControl.setValidators([
-            Validators.required,
-            countryMatchValidator(countries),
-          ]);
-          countryControl.updateValueAndValidity();
-        }
-      })
-    );
-  }
 
   #getCountries(): Observable<string[]> {
     return this.#countryValueSubject.pipe(
       debounceTime(300),
       distinctUntilChanged(),
       switchMap((query) => this.#countriesService.filterCountries(query)),
-      tap(() => console.log('execute')),
       shareReplay(1)
     );
   }
