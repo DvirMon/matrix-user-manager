@@ -23,6 +23,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   Observable,
+  shareReplay,
   Subject,
   switchMap,
   tap
@@ -33,6 +34,7 @@ import { FormErrorService } from "src/app/services/form-error.service";
 import { UserDialogComponent } from "../user-dialog/user-dialog.component";
 import { provideUserMessageManger } from "./user-form-error.service";
 import { countryMatchValidator, UserFormService } from "./user-form.service";
+import { OptionValidationDirective } from "src/app/directives/option-validation.directive";
 
 @Component({
   selector: "app-user-form",
@@ -48,6 +50,7 @@ import { countryMatchValidator, UserFormService } from "./user-form.service";
     MatAutocompleteModule,
     MatSelectModule,
     MatButtonModule,
+    OptionValidationDirective
   ],
   templateUrl: "./user-form.component.html",
   styleUrls: ["./user-form.component.scss"],
@@ -80,33 +83,18 @@ export class UserFormComponent implements OnInit {
   ngOnInit(): void {
     this.userForm = this.#userFormService.createUserForm(this.user, this.#fbn);
 
-    this.triggerValidCountries$ = this.#setValidCountries();
-
     this.filteredCountries$ = this.#getCountries();
 
     this.messages$ = this.#formErrorService.getMessages$(this.userForm);
   }
 
-  #setValidCountries() {
-    return this.#countriesService.fetchCountries().pipe(
-      tap((countries) => {
-        const countryControl = this.userForm.get("country");
-        if (countryControl) {
-          countryControl.setValidators([
-            Validators.required,
-            countryMatchValidator(countries),
-          ]);
-          countryControl.updateValueAndValidity();
-        }
-      })
-    );
-  }
 
   #getCountries(): Observable<string[]> {
     return this.#countryValueSubject.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((query) => this.#countriesService.filterCountries(query))
+      switchMap((query) => this.#countriesService.filterCountries(query)),
+      shareReplay(1)
     );
   }
 

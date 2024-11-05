@@ -54,10 +54,12 @@
         formControlName="country"
         [matAutocomplete]="auto"
         (input)="onCountryChanged($event)"
+        appOptionValidation
+        [list]="filteredCountries$ | async"
         required />
       <mat-autocomplete #auto="matAutocomplete">
         <mat-option
-          *ngFor="let country of filteredCountries$ | async"
+          *ngFor="let country of filteredCountries$ | async as countries"
           [value]="country">
           {{ country }}
         </mat-option>
@@ -92,4 +94,3 @@
   </div>
 </form>
 
-<ng-container *ngIf="triggerValidCountries$ | async"></ng-container>
