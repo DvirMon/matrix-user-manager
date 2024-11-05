@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, of } from "rxjs";
 import { v4 as uuidv4 } from "uuid";
 import { User } from "../models/user";
 import { LocalStorageService } from "./local-storage.service";
@@ -22,14 +22,15 @@ export class UsersService {
     return this.#users$;
   }
 
-  addUser(user: User): void {
+  addUser(user: User): Observable<User> {
     const currentUsers = this.#usersSubject.getValue();
     const userWithId = { ...user, id: uuidv4() };
     const updatedUsers = [userWithId, ...currentUsers];
     this.#updateUsers([...updatedUsers]);
+    return of(userWithId);
   }
 
-  deleteUser(userId: string): void {
+  deleteUser(userId: string): Observable<void> {
     const currentUsers = this.#usersSubject.getValue();
     const index = currentUsers.findIndex((user) => user.id === userId);
 
@@ -37,9 +38,11 @@ export class UsersService {
       currentUsers.splice(index, 1);
       this.#updateUsers([...currentUsers]);
     }
+
+    return of();
   }
 
-  editUser(updatedUserData: Partial<User>): void {
+  editUser(updatedUserData: Partial<User>): Observable<User> {
     const currentUsers = this.#usersSubject.getValue();
     const index = currentUsers.findIndex(
       (user) => user.id === updatedUserData.id
@@ -49,6 +52,8 @@ export class UsersService {
       currentUsers[index] = { ...currentUsers[index], ...updatedUserData };
       this.#updateUsers([...currentUsers]);
     }
+
+    return of(null as any);
   }
 
   #updateUsers(users: User[]): void {

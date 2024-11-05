@@ -1,3 +1,13 @@
 {
-  "users": []
+  "users": [
+    {
+      "id": "827b9e3e-62c6-4da2-9093-5fb70f9ca011",
+      "firstName": "dsds",
+      "lastName": "dsds",
+      "age": 43,
+      "city": "sasa",
+      "gender": "male",
+      "country": "Saint Kitts and Nevis"
+    }
+  ]
 }

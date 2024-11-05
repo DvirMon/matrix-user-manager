@@ -5,10 +5,9 @@ import { Observable } from "rxjs";
 import { UserFormComponent } from "src/app/components/user-form/user-form.component";
 import { UserTableComponent } from "src/app/components/user-table/user-table.component";
 import { User } from "src/app/models/user";
+import { HttpStorageService } from "src/app/services/http-storage.service";
 import { UserManagerService } from "src/app/services/user-manager.service";
-import {
-  ActionType
-} from "src/app/services/user-strategy.service";
+import { ActionType } from "src/app/services/user-strategy.service";
 import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float-icon-button.component";
 
 @Component({
@@ -28,6 +27,8 @@ import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float
 })
 export class HomeComponent {
   #userManageService = inject(UserManagerService);
+
+  #userHttp = inject(HttpStorageService);
 
   users$ = this.#userManageService.getUsers$();
 
@@ -52,6 +53,8 @@ export class HomeComponent {
       type: ActionType.ADD,
       user: null,
     });
+
+
   }
 
   onEditTableEvent(user: User): void {
@@ -60,5 +63,7 @@ export class HomeComponent {
 
   onDeleteEditEvent(user: User): void {
     this.#userManageService.emitStrategy({ type: ActionType.DELETE, user });
+
+
   }
 }
