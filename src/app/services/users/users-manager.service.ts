@@ -2,8 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Observable, Subject, switchMap } from "rxjs";
 import { User } from "../../models/user";
 import { ActionType, UserStrategyService } from "./user-strategy.service";
-import { UsersLocalService } from "./users-local.service";
-import { UsersRemoteService } from "./users-remote.service";
+import { AbstractUsersService } from "./abstract-users.service";
 
 @Injectable({
   providedIn: "root",
@@ -12,7 +11,7 @@ export class UsersManagerService {
   #strategySubject = new Subject<{ type: ActionType; user: User | null }>();
 
   #userStrategyService = inject(UserStrategyService);
-  #userService = inject(UsersRemoteService);
+  #userService = inject(AbstractUsersService);
 
   getUsers$(): Observable<User[]> {
     return this.#userService.getUsers$();

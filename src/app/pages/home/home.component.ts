@@ -5,9 +5,8 @@ import { Observable } from "rxjs";
 import { UserFormComponent } from "src/app/components/user-form/user-form.component";
 import { UserTableComponent } from "src/app/components/user-table/user-table.component";
 import { User } from "src/app/models/user";
-import { UsersRemoteService } from "src/app/services/users/users-remote.service";
-import { UsersManagerService } from "src/app/services/users/users-manager.service";
 import { ActionType } from "src/app/services/users/user-strategy.service";
+import { UsersManagerService } from "src/app/services/users/users-manager.service";
 import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float-icon-button.component";
 
 @Component({
@@ -24,11 +23,10 @@ import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [],
 })
 export class HomeComponent {
   #userManageService = inject(UsersManagerService);
-
-  #userHttp = inject(UsersRemoteService);
 
   users$ = this.#userManageService.getUsers$();
 

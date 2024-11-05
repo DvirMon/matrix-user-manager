@@ -2,8 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { filter, map, Observable, of, switchMap } from "rxjs";
 import { UserDialogService } from "../../components/user-dialog/user-dialog.service";
 import { User } from "../../models/user";
-import { UsersLocalService } from "./users-local.service";
-import { UsersRemoteService } from "./users-remote.service";
+import { AbstractUsersService } from "./abstract-users.service";
 
 export enum ActionType {
   ADD = "add",
@@ -16,7 +15,7 @@ export enum ActionType {
 export class UserStrategyService {
   #strategyMap = new Map<ActionType, (user: User) => Observable<void>>();
 
-  #userService = inject(UsersRemoteService);
+  #userService = inject(AbstractUsersService);
   #dialogService = inject(UserDialogService);
 
   constructor() {
