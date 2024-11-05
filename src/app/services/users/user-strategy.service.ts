@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { filter, map, Observable, of, switchMap } from "rxjs";
-import { UserDialogService } from "../components/user-dialog/user-dialog.service";
-import { User } from "../models/user";
+import { UserDialogService } from "../../components/user-dialog/user-dialog.service";
+import { User } from "../../models/user";
 import { UsersLocalService } from "./users-local.service";
 import { UsersRemoteService } from "./users-remote.service";
 

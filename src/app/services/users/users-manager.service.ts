@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { Observable, Subject, switchMap } from "rxjs";
-import { User } from "../models/user";
+import { User } from "../../models/user";
 import { ActionType, UserStrategyService } from "./user-strategy.service";
 import { UsersLocalService } from "./users-local.service";
 import { UsersRemoteService } from "./users-remote.service";

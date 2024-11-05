@@ -1,8 +1,8 @@
 import { inject, Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { v4 as uuidv4 } from "uuid";
-import { User } from "../models/user";
-import { LocalStorageService } from "./local-storage.service";
+import { User } from "../../models/user";
+import { LocalStorageService } from "../utils/local-storage.service";
 
 @Injectable({
   providedIn: "root",

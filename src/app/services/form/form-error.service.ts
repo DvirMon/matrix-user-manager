@@ -2,7 +2,7 @@ import { inject } from "@angular/core";
 import { FormGroup, ValidationErrors } from "@angular/forms";
 import { Observable } from "rxjs";
 import { distinctUntilChanged, map, shareReplay } from "rxjs/operators";
-import { MessageManager } from "./messages-manger.service";
+import { MessageManager } from "../utils/messages-manger";
 
 export class FormErrorService {
   #messageManager = inject(MessageManager);
