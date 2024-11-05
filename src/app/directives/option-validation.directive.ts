@@ -1,10 +1,9 @@
 import { Directive, Input } from "@angular/core";
 import {
-  NG_VALIDATORS,
-  Validator,
-  ValidatorFn,
   AbstractControl,
+  NG_VALIDATORS,
   ValidationErrors,
+  ValidatorFn
 } from "@angular/forms";
 import { countryMatchValidator } from "../components/user-form/user-form.service";
 
@@ -24,7 +23,9 @@ export class OptionValidationDirective {
 
   @Input("list")
   set list(value: string[] | null) {
-    this.#validator = countryMatchValidator(value as string[]);
+    if (value !== null) {
+      this.#validator = countryMatchValidator(value as string[]);
+    }
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
