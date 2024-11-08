@@ -3,15 +3,15 @@
     <app-user-table
       [data]="users$ | async"
       [columns]="columns"
-      (deleteEvent)="onDeleteEditEvent($event)"
-      (editEvent)="onEditTableEvent($event)"></app-user-table>
+      (deleteEvent)="onDeleteUserEvent($event)"
+      (editEvent)="onEditUserEvent($event)"></app-user-table>
     <app-user-table
       [data]="users$ | async"
       [columns]="columns"
-      (deleteEvent)="onDeleteEditEvent($event)"
-      (editEvent)="onEditTableEvent($event)"></app-user-table>
+      (deleteEvent)="onDeleteUserEvent($event)"
+      (editEvent)="onEditUserEvent($event)"></app-user-table>
   </div>
 </main>
-<app-float-icon-button (clickEvent)="onClickEvent()"></app-float-icon-button>
+<app-float-icon-button (clickEvent)="onAddUserEvent()"></app-float-icon-button>
 
 <ng-container *ngIf="strategyTrigger$ | async"></ng-container>

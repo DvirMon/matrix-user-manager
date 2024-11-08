@@ -46,18 +46,18 @@ export class HomeComponent {
     this.strategyTrigger$ = this.#userManageService.executeStrategy();
   }
 
-  onClickEvent(): void {
+  onAddUserEvent(): void {
     this.#userManageService.emitStrategy({
       type: ActionType.ADD,
       user: null,
     });
   }
 
-  onEditTableEvent(user: User): void {
+  onEditUserEvent(user: User): void {
     this.#userManageService.emitStrategy({ type: ActionType.EDIT, user });
   }
 
-  onDeleteEditEvent(user: User): void {
+  onDeleteUserEvent(user: User): void {
     this.#userManageService.emitStrategy({ type: ActionType.DELETE, user });
   }
 }
