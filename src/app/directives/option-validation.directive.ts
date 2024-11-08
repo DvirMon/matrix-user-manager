@@ -4,14 +4,14 @@ import {
   NgControl,
   ValidationErrors,
   ValidatorFn,
-  Validators
+  Validators,
 } from "@angular/forms";
 
-export function matchValidator<T>(validOptions: T[] | null): ValidatorFn {
+export function matchValidator<T>(validOptions: Set<T> | null): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    if (!control.value || !validOptions) return null; // Allow empty values
+    if (!control.value || !validOptions) return null;
 
-    const isValid = validOptions.includes(control.value as T);
+    const isValid = validOptions.has(control.value);
     return isValid ? null : { optionMismatch: true };
   };
 }
@@ -20,19 +20,19 @@ export function matchValidator<T>(validOptions: T[] | null): ValidatorFn {
   standalone: true,
 })
 export class OptionValidationDirective {
-  #list: Array<string | number | boolean> | null = null;
+  #list: Set<string | number | boolean> | null = null;
   #validator: ValidatorFn | null = null;
 
   #ngControl = inject(NgControl, { optional: true });
 
   @Input("list")
   set list(value: Array<string | number | boolean> | null) {
-    this.#list = value;
+    this.#list = new Set(value);
     this.#validator = matchValidator(this.#list);
-    this.applyValidator();
+    this.#applyValidator();
   }
 
-  private applyValidator() {
+  #applyValidator() {
     if (this.#ngControl?.control && this.#validator) {
       this.#ngControl.control.setValidators([
         Validators.required,
