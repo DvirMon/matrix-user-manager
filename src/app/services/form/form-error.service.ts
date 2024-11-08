@@ -7,7 +7,7 @@ import {
   shareReplay,
   startWith,
 } from "rxjs/operators";
-import { MessageManager } from "./messages-manger.service";
+import { MessageManager } from "../utils/messages-manger";
 
 export class FormErrorService {
   #messageManager = inject(MessageManager);

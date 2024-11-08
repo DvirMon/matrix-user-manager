@@ -1,5 +1,5 @@
 import { Injectable, Provider } from "@angular/core";
-import { MessageManager } from "src/app/services/messages-manger.service";
+import { MessageManager } from "src/app/services/utils/messages-manger";
 
 export function provideUserMessageManger(): Provider {
   return { provide: MessageManager, useClass: UserFormErrorService };

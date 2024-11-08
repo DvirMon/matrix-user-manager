@@ -1,8 +1,8 @@
 import { inject, Injectable } from "@angular/core";
-import { filter, map, Observable, of } from "rxjs";
-import { UserDialogService } from "../components/user-dialog/user-dialog.service";
-import { User } from "../models/user";
-import { UsersService } from "./users.service";
+import { filter, map, Observable, of, switchMap } from "rxjs";
+import { UserDialogService } from "../../components/user-dialog/user-dialog.service";
+import { User } from "../../models/user";
+import { AbstractUsersService } from "./abstract-users.service";
 
 export enum ActionType {
   ADD = "add",
@@ -15,25 +15,24 @@ export enum ActionType {
 export class UserStrategyService {
   #strategyMap = new Map<ActionType, (user: User) => Observable<void>>();
 
-  #userService = inject(UsersService);
+  #userService = inject(AbstractUsersService);
   #dialogService = inject(UserDialogService);
 
   constructor() {
     this.#strategyMap.set(ActionType.ADD, (user: User) =>
       this.#openDialogThenExecute(
         { mode: ActionType.ADD, user },
-        this.#userService.addUser.bind(this.#userService)
+        (user: User) => this.#userService.addUser(user).pipe(map(() => void 0))
       )
     );
     this.#strategyMap.set(ActionType.EDIT, (user: User) =>
       this.#openDialogThenExecute(
         { mode: ActionType.EDIT, user },
-        this.#userService.editUser.bind(this.#userService)
+        (user: User) => this.#userService.editUser(user).pipe(map(() => void 0))
       )
     );
     this.#strategyMap.set(ActionType.DELETE, (user: User) => {
-      this.#userService.deleteUser(user.id);
-      return of();
+      return this.#userService.deleteUser(user.id);
     });
   }
 
@@ -43,18 +42,18 @@ export class UserStrategyService {
       return strategy(user);
     } else {
       console.warn(`No strategy found for action type: ${type}`);
-      return of(); 
+      return of();
     }
   }
 
   #openDialogThenExecute(
     dialogConfig: { mode: ActionType; user: User },
-    action: (user: User) => void
+    action: (user: User) => Observable<void>
   ): Observable<void> {
     const dialogRef = this.#dialogService.open(dialogConfig);
     return dialogRef.afterClosed().pipe(
       filter((result) => result !== null),
-      map((result: User) => action(result))
+      switchMap((result: User) => action(result)) // Use switchMap to handle the Observable<void> from action
     );
   }
 }

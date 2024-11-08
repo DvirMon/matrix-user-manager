@@ -1,0 +1,31 @@
+{
+  "users": [
+    {
+      "id": "ef2c42c5-f386-4eee-9865-f0c35d6d09a6",
+      "firstName": "Danny",
+      "lastName": "dsds",
+      "age": 433,
+      "city": "telsasa",
+      "gender": "female",
+      "country": "South Georgia"
+    },
+    {
+      "id": "9a1e",
+      "firstName": "Joey",
+      "lastName": "dhsjhd",
+      "age": 32,
+      "city": "dsds",
+      "gender": "male",
+      "country": "DR Congo"
+    },
+    {
+      "id": "79d9",
+      "firstName": "Frank",
+      "lastName": "Abangail",
+      "age": 56,
+      "city": "Dork",
+      "gender": "male",
+      "country": "Switzerland"
+    }
+  ]
+}

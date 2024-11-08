@@ -26,11 +26,11 @@ import {
   shareReplay,
   Subject,
   switchMap,
-  tap
+  tap,
 } from "rxjs";
 import { User } from "src/app/models/user";
-import { CountriesService } from "src/app/services/countries.service";
-import { FormErrorService } from "src/app/services/form-error.service";
+import { CountriesService } from "src/app/services/utils/countries.service";
+import { FormErrorService } from "src/app/services/form/form-error.service";
 import { UserDialogComponent } from "../user-dialog/user-dialog.component";
 import { provideUserMessageManger } from "./user-form-error.service";
 import { countryMatchValidator, UserFormService } from "./user-form.service";
