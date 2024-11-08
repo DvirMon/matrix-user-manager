@@ -2,15 +2,15 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import {
   BehaviorSubject,
+  map,
   Observable,
   of,
-  shareReplay,
-  startWith,
-  Subject,
   switchMap,
+  take,
   tap,
 } from "rxjs";
 import { User } from "../../models/user";
+import { CrudService } from "../utils/crud.service";
 import { AbstractUsersService } from "./abstract-users.service";
 
 @Injectable({
@@ -19,57 +19,64 @@ import { AbstractUsersService } from "./abstract-users.service";
 export class UsersRemoteService extends AbstractUsersService {
   readonly apiUrl = "http://localhost:3000/users";
 
-  #usersSubject = new BehaviorSubject<User[]>([]);
-
-  override users$ = this.#usersSubject.asObservable();
-
-  // #users$: Observable<User[]> = this.reloadTrigger$.asObservable().pipe(
-  //   startWith(void 0),
-  //   switchMap(() => this.loadUsers()),
-  //   shareReplay(1)
-  // );
+  #crudService = inject(CrudService);
 
   #http = inject(HttpClient);
 
-  loadUsers(): Observable<User[]> {
-    return this.#http.get<User[]>(this.apiUrl).pipe(
-      tap((users) => this.#usersSubject.next(users)),
-      switchMap(() => this.users$)
-    );
-  }
 
   getUsers$(): Observable<User[]> {
     return this.#http.get<User[]>(this.apiUrl).pipe(
-      tap((users) => this.#usersSubject.next(users)),
+      tap((users) => this.usersSubject.next(users)),
       switchMap(() => this.users$)
     );
   }
 
   addUser(user: User): Observable<void> {
     return this.#http.post<User>(this.apiUrl, user).pipe(
-      switchMap((userWithId) => {
-        const currentUsers = this.#usersSubject.getValue();
-        const updatedUsers = [userWithId, ...currentUsers];
-        this.#usersSubject.next(updatedUsers);
-        return this.#reload();
-      })
+      switchMap((userWithId) =>
+        this.usersSubject.asObservable().pipe(
+          take(1),
+          map((currentUsers) =>
+            this.#crudService.addItem(currentUsers, userWithId)
+          ),
+          switchMap((updatedUsers) => this.#reload(updatedUsers))
+        )
+      )
+    );
+  }
+  deleteUser(userId: string): Observable<void> {
+    return this.#http.delete<void>(`${this.apiUrl}/${userId}`).pipe(
+      switchMap(() =>
+        this.usersSubject.asObservable().pipe(
+          take(1),
+          map((currentUsers) =>
+            this.#crudService.deleteItem(currentUsers, userId)
+          ),
+          switchMap((updatedUsers) => this.#reload(updatedUsers))
+        )
+      )
     );
   }
 
-  deleteUser(userId: string): Observable<void> {
-    return this.#http
-      .delete<void>(`${this.apiUrl}/${userId}`)
-      .pipe(switchMap(() => this.#reload()));
+  editUser(partialUser: Partial<User>): Observable<void> {
+    const url = `${this.apiUrl}/${partialUser.id}`;
+
+    return this.#http.patch<User>(url, partialUser).pipe(
+      switchMap((updatedUser) =>
+        this.usersSubject.asObservable().pipe(
+          take(1),
+          map((currentUsers) =>
+            this.#crudService.editItem(currentUsers, updatedUser)
+          ),
+          switchMap((updatedUsers) => this.#reload(updatedUsers))
+        )
+      )
+    );
   }
 
-  editUser(updatedUserData: Partial<User>): Observable<void> {
-    return this.#http
-      .patch<User>(`${this.apiUrl}/${updatedUserData.id}`, updatedUserData)
-      .pipe(switchMap(() => this.#reload()));
-  }
-
-  #reload(): Observable<void> {
-    this.reloadTrigger$.next();
-    return of();
+  #reload(users: User[]): Observable<void> {
+    return of(this.usersSubject.next(users)).pipe(
+      tap(() => this.reloadTrigger$.next())
+    );
   }
 }

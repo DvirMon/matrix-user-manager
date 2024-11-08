@@ -21,6 +21,7 @@ import { UserTableService } from "./user-table.service";
   templateUrl: "./user-table.component.html",
   styleUrls: ["./user-table.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [UserTableService],
 })
 export class UserTableComponent {
   #tableService = inject(UserTableService);

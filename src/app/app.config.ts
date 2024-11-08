@@ -12,6 +12,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(),
     importProvidersFrom([HttpClientModule, MatDialogModule]),
-    provideUsersLogic({ useLocal: false }),
+    provideUsersLogic(),
   ],
 };

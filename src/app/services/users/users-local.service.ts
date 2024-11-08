@@ -1,15 +1,13 @@
 import { inject, Injectable } from "@angular/core";
 import {
-  BehaviorSubject,
+  map,
   Observable,
-  of,
-  shareReplay,
-  startWith,
-  Subject,
   switchMap,
+  tap
 } from "rxjs";
 import { v4 as uuidv4 } from "uuid";
 import { User } from "../../models/user";
+import { CrudService } from "../utils/crud.service";
 import { LocalStorageService } from "../utils/local-storage.service";
 import { AbstractUsersService } from "./abstract-users.service";
 
@@ -21,53 +19,55 @@ export class UsersLocalService extends AbstractUsersService {
 
   #localStorageService = inject(LocalStorageService);
 
-  override users$: Observable<User[]> = this.reloadTrigger$.pipe(
-    startWith(void 0), //
-    switchMap(() => of(this.#loadUsers())),
-    shareReplay(1)
-  );
+
+  #crudService = inject(CrudService);
+
+  loadUsers(): Observable<User[]> {
+    return this.#localStorageService.loadUsers(this.STORAGE_KEY) as Observable<
+      User[]
+    >;
+  }
 
   getUsers$(): Observable<User[]> {
-    return this.users$;
+    return this.loadUsers().pipe(
+      tap((users) => this.usersSubject.next(users)),
+      switchMap(() => this.users$)
+    );
   }
 
   addUser(user: User): Observable<void> {
-    const currentUsers = this.#loadUsers();
     const userWithId = { ...user, id: uuidv4() };
-    const updatedUsers = [userWithId, ...currentUsers];
-    this.#reload(updatedUsers);
-    return this.#reload(updatedUsers);
+
+    return this.loadUsers().pipe(
+      map((currentUsers) =>
+        this.#crudService.addItem(currentUsers, userWithId)
+      ),
+      switchMap((updatedUsers) => this.#reload(updatedUsers))
+    );
   }
 
   deleteUser(userId: string): Observable<void> {
-    const currentUsers = this.#loadUsers();
-    const updatedUsers = currentUsers.filter((user) => user.id !== userId);
-    this.#reload(updatedUsers);
-    return of();
-  }
-
-  editUser(updatedUserData: Partial<User>): Observable<void> {
-    const currentUsers = this.#loadUsers();
-
-    const index = currentUsers.findIndex(
-      (user) => user.id === updatedUserData.id
+    return this.loadUsers().pipe(
+      map((currentUsers) => this.#crudService.deleteItem(currentUsers, userId)),
+      switchMap((updatedUsers) => this.#reload(updatedUsers))
     );
-
-    if (index !== -1) {
-      currentUsers[index] = { ...currentUsers[index], ...updatedUserData };
-    }
-    return this.#reload([...currentUsers]);
   }
+  editUser(updatedUserData: Partial<User>): Observable<void> {
+    const currentUsers$ = this.loadUsers();
 
-  #loadUsers(): User[] {
-    return (
-      (this.#localStorageService.loadUsers(this.STORAGE_KEY) as User[]) || []
+    return currentUsers$.pipe(
+      map((currentUsers) =>
+        this.#crudService.editItem(currentUsers, updatedUserData)
+      ),
+      switchMap((currentUsers) => {
+        return this.#reload(currentUsers);
+      })
     );
   }
 
   #reload(users: User[]): Observable<void> {
-    this.reloadTrigger$.next();
-    this.#localStorageService.saveUsers(this.STORAGE_KEY, users);
-    return of();
+    return this.#localStorageService
+      .saveUsers(this.STORAGE_KEY, users)
+      .pipe(tap(() => this.reloadTrigger$.next()));
   }
 }
