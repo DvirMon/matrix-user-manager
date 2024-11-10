@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule, NgStyle } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,13 +7,13 @@ import {
   OnInit,
   Output,
 } from "@angular/core";
-import { MatLegacyButtonModule as MatButtonModule } from "@angular/material/legacy-button";
+import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 
 @Component({
   selector: "app-float-icon-button",
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule],
+  imports: [NgStyle, MatButtonModule, MatIconModule],
   template: `<button
     mat-fab
     (click)="clickEvent.emit()"
@@ -22,7 +22,6 @@ import { MatIconModule } from "@angular/material/icon";
     <mat-icon [fontIcon]="icon"></mat-icon>
   </button> `,
   styleUrls: ["./float-icon-button.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FloatIconButtonComponent implements OnInit {
   #icon: string = "add";

@@ -7,9 +7,9 @@ import {
   Input,
   Output
 } from "@angular/core";
-import { MatLegacyButtonModule as MatButtonModule } from "@angular/material/legacy-button";
+import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { MatLegacyTableModule as MatTableModule } from "@angular/material/legacy-table";
+import { MatTableModule } from '@angular/material/table';
 import { Observable } from "rxjs";
 import { User } from "src/app/models/user";
 import { UserTableService } from "./user-table.service";
