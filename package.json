@@ -9,7 +9,6 @@
     "test": "ng test",
     "server": "json-server --watch db.json --port 3000",
     "start:dev": "concurrently \"npm run start\" \"npm run server\""
-
   },
   "private": true,
   "dependencies": {
@@ -25,6 +24,7 @@
     "@angular/router": "^14.2.0",
     "@types/node": "^20.3.2",
     "rxjs": "~7.5.0",
+    "superjson": "^2.2.1",
     "tslib": "^2.3.0",
     "uuid": "^11.0.2",
     "zone.js": "~0.11.4"
