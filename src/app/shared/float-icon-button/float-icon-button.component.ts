@@ -22,6 +22,7 @@ import { MatIconModule } from "@angular/material/icon";
     <mat-icon [fontIcon]="icon"></mat-icon>
   </button> `,
   styleUrls: ["./float-icon-button.component.scss"],
+  changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class FloatIconButtonComponent implements OnInit {
   #icon: string = "add";
