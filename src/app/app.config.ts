@@ -1,17 +1,15 @@
-import { HttpClientModule } from "@angular/common/http";
-import { importProvidersFrom } from "@angular/core";
-import { MatLegacyDialogModule as MatDialogModule } from "@angular/material/legacy-dialog";
-import { ApplicationConfig } from "@angular/platform-browser";
-import { provideAnimations } from "@angular/platform-browser/animations";
-import { provideRouter } from "@angular/router";
+import { ApplicationConfig } from "@angular/core";
 import { routes } from "./app.routes";
 import { provideUsersLogic } from "./services/users/users.provider";
+import { provideAnimations } from "@angular/platform-browser/animations";
+import { provideHttpClient } from "@angular/common/http";
+import { provideRouter } from "@angular/router";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimations(),
-    importProvidersFrom([HttpClientModule, MatDialogModule]),
+    provideHttpClient(),
     provideUsersLogic(),
   ],
 };
