@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { UserDialogComponent, UserDialogData } from "./user-dialog.component";
 
 @Injectable({
@@ -8,7 +8,7 @@ import { UserDialogComponent, UserDialogData } from "./user-dialog.component";
 export class UserDialogService {
   #dialog = inject(MatDialog);
 
-  open<T>(data?: UserDialogData): MatDialogRef<UserDialogComponent> {
+  open<T>(data?: UserDialogData): MatDialogRef<UserDialogComponent, T> {
     return this.#dialog.open(UserDialogComponent, {
       data,
       autoFocus: true,

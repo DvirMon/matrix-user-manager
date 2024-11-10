@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
 import { User } from "src/app/models/user";
 import { UserFormComponent } from "../user-form/user-form.component";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 export interface UserDialogData {
   user: User | null;
@@ -26,14 +26,5 @@ export class UserDialogComponent {
 
   constructor() {
     this.isEditMode = this.data.mode === "edit";
-  }
-
-  onSave(): void {
-    // Logic for handling save
-    this.dialogRef.close(true);
-  }
-
-  onCancel(): void {
-    this.dialogRef.close(false);
   }
 }

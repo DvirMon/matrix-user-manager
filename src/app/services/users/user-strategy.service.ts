@@ -52,8 +52,8 @@ export class UserStrategyService {
   ): Observable<void> {
     const dialogRef = this.#dialogService.open(dialogConfig);
     return dialogRef.afterClosed().pipe(
-      filter((result) => result !== null),
-      switchMap((result: User) => action(result)) // Use switchMap to handle the Observable<void> from action
+      filter((result: unknown | undefined) => !result),
+      switchMap((result: unknown) => action(result as User))
     );
   }
 }
