@@ -1,4 +1,4 @@
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, WritableSignal } from "@angular/core";
 import { map, Observable, switchMap, tap } from "rxjs";
 import { v4 as uuidv4 } from "uuid";
 import { User } from "../../models/user";
@@ -16,13 +16,17 @@ export class UsersLocalService extends AbstractUsersService {
 
   #crudService = inject(CrudService);
 
+  override getUsers(): WritableSignal<User[]> {
+    return this.users;
+  }
+
   load(): Observable<User[]> {
     return this.#localStorageService.load(this.STORAGE_KEY) as Observable<
       User[]
     >;
   }
 
-  getUsers$(): Observable<User[]> {
+  override getUsers$(): Observable<User[]> {
     return this.load().pipe(
       tap((users) => this.usersSubject.next(users)),
       switchMap(() => this.users$)

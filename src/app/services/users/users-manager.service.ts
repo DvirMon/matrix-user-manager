@@ -1,33 +1,31 @@
-import { inject, Injectable } from "@angular/core";
-import { Observable, Subject, switchMap } from "rxjs";
+import { inject, Injectable, Signal, WritableSignal } from "@angular/core";
+import { Observable } from "rxjs";
 import { User } from "../../models/user";
-import { ActionType, UserStrategyService } from "./user-strategy.service";
 import { AbstractUsersService } from "./abstract-users.service";
+import { ActionType, UserStrategyService } from "./user-strategy.service";
+import { toSignal } from "@angular/core/rxjs-interop";
+
+export interface UserAction {
+  type: ActionType;
+  user: User | null;
+}
 
 @Injectable({
   providedIn: "root",
 })
 export class UsersManagerService {
-  #strategySubject = new Subject<{ type: ActionType; user: User | null }>();
-
   #userStrategyService = inject(UserStrategyService);
   #userService = inject(AbstractUsersService);
+
+  getUsers(): WritableSignal<User[]> {
+    return this.#userService.getUsers();
+  }
 
   getUsers$(): Observable<User[]> {
     return this.#userService.getUsers$();
   }
 
-  emitStrategy(data: { type: ActionType; user: User | null }): void {
-    this.#strategySubject.next(data);
-  }
-
-  executeStrategy(): Observable<void> {
-    return this.#strategySubject
-      .asObservable()
-      .pipe(
-        switchMap(({ type, user }) =>
-          this.#userStrategyService.execute(type, user!)
-        )
-      );
+  execute(action: UserAction): Observable<void> {
+    return this.#userStrategyService.execute(action.type, action.user);
   }
 }

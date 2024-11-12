@@ -13,30 +13,36 @@ export enum ActionType {
   providedIn: "root",
 })
 export class UserStrategyService {
-  #strategyMap = new Map<ActionType, (user: User) => Observable<void>>();
+  #strategyMap = new Map<ActionType, (user: User | null) => Observable<void>>();
 
   #userService = inject(AbstractUsersService);
   #dialogService = inject(UserDialogService);
 
   constructor() {
-    this.#strategyMap.set(ActionType.ADD, (user: User) =>
+    this.#strategyMap.set(ActionType.ADD, (user: User | null) =>
       this.#openDialogThenExecute(
         { mode: ActionType.ADD, user },
-        (user: User) => this.#userService.addUser(user).pipe(map(() => void 0))
+        (userData: User) =>
+          this.#userService.addUser(userData).pipe(map(() => void 0))
       )
     );
-    this.#strategyMap.set(ActionType.EDIT, (user: User) =>
+    this.#strategyMap.set(ActionType.EDIT, (user: User | null) =>
       this.#openDialogThenExecute(
         { mode: ActionType.EDIT, user },
-        (user: User) => this.#userService.editUser(user).pipe(map(() => void 0))
+        (userData: User) =>
+          this.#userService.editUser(userData).pipe(map(() => void 0))
       )
     );
-    this.#strategyMap.set(ActionType.DELETE, (user: User) => {
-      return this.#userService.deleteUser(user.id);
+    this.#strategyMap.set(ActionType.DELETE, (user: User | null) => {
+      if (user) {
+        return this.#userService.deleteUser(user.id);
+      }
+
+      return of();
     });
   }
 
-  execute(type: ActionType, user: User): Observable<void> {
+  execute(type: ActionType, user: User | null): Observable<void> {
     const strategy = this.#strategyMap.get(type);
     if (strategy) {
       return strategy(user);
@@ -47,7 +53,7 @@ export class UserStrategyService {
   }
 
   #openDialogThenExecute(
-    dialogConfig: { mode: ActionType; user: User },
+    dialogConfig: { mode: ActionType; user: User | null },
     action: (user: User) => Observable<void>
   ): Observable<void> {
     const dialogRef = this.#dialogService.open(dialogConfig);
