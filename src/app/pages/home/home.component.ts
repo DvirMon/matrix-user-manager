@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { Observable } from "rxjs";
@@ -8,12 +8,12 @@ import { User } from "src/app/models/user";
 import { ActionType } from "src/app/services/users/user-strategy.service";
 import { UsersManagerService } from "src/app/services/users/users-manager.service";
 import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float-icon-button.component";
+import { toSignal } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-home",
   standalone: true,
   imports: [
-    NgIf,
     AsyncPipe,
     RouterModule,
     FloatIconButtonComponent,
@@ -28,7 +28,9 @@ import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float
 export class HomeComponent {
   #userManageService = inject(UsersManagerService);
 
-  users$ = this.#userManageService.getUsers$();
+  users = toSignal(this.#userManageService.getUsers$(), {
+    initialValue: [],
+  });
 
   // trigger logic in the template
   strategyTrigger$: Observable<void>;

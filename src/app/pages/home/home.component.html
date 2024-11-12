@@ -1,12 +1,12 @@
 <main>
   <div class="table-container">
     <app-user-table
-      [data]="users$ | async"
+      [data]="users()"
       [columns]="columns"
       (deleteEvent)="onDeleteUserEvent($event)"
       (editEvent)="onEditUserEvent($event)"></app-user-table>
     <app-user-table
-      [data]="users$ | async"
+      [data]="users()"
       [columns]="columns"
       (deleteEvent)="onDeleteUserEvent($event)"
       (editEvent)="onEditUserEvent($event)"></app-user-table>
@@ -14,4 +14,5 @@
 </main>
 <app-float-icon-button (clickEvent)="onAddUserEvent()"></app-float-icon-button>
 
-<ng-container *ngIf="strategyTrigger$ | async"></ng-container>
+@let action = strategyTrigger$ | async;
+{{ action }}

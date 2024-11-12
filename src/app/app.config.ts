@@ -10,6 +10,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(),
     provideHttpClient(),
-    provideUsersLogic(),
+    provideUsersLogic({useLocal : false}),
   ],
 };
