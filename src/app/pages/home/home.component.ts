@@ -46,6 +46,8 @@ export class HomeComponent {
 
   constructor() {
     this.strategyTrigger$ = this.#userManageService.executeStrategy();
+
+
   }
 
   onAddUserEvent(): void {

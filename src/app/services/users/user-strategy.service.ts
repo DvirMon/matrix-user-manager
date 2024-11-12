@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { filter, map, Observable, of, switchMap } from "rxjs";
+import { filter, map, Observable, of, switchMap, tap } from "rxjs";
 import { UserDialogService } from "../../components/user-dialog/user-dialog.service";
 import { User } from "../../models/user";
 import { AbstractUsersService } from "./abstract-users.service";
@@ -52,7 +52,7 @@ export class UserStrategyService {
   ): Observable<void> {
     const dialogRef = this.#dialogService.open(dialogConfig);
     return dialogRef.afterClosed().pipe(
-      filter((result: unknown | undefined) => !result),
+      filter((result: unknown | undefined) => !!result),
       switchMap((result: unknown) => action(result as User))
     );
   }
