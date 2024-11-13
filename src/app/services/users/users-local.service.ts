@@ -1,5 +1,5 @@
 import { inject, Injectable, WritableSignal } from "@angular/core";
-import { map, Observable, of } from "rxjs";
+import { map, Observable, of, switchMap } from "rxjs";
 import { v4 as uuidv4 } from "uuid";
 import { User } from "../../models/user";
 import { CrudService } from "../utils/crud.service";
@@ -16,45 +16,41 @@ export class UsersLocalService extends AbstractUsersService {
 
   #crudService = inject(CrudService);
 
-  override getUsers(): WritableSignal<User[]> {
-    return this.users;
-  }
-
-  override getUsers$(): Observable<User[]> {
+  override loadUsers(): Observable<User[]> {
     return of(this.#localStorageService.load(this.STORAGE_KEY)).pipe(
       map((users) => users || [])
     ) as Observable<User[]>;
   }
 
-  addUser(user: User): Observable<void> {
+  addUser(user: User): Observable<User[]> {
     return of(user).pipe(
       map((user) => ({ ...user, id: uuidv4() })),
-      map((userWithId) => {
+      switchMap((userWithId) => {
         const currentUsers = this.users();
         const updatedUsers = this.#crudService.addItem(
           currentUsers,
           userWithId
         );
-        this.#setData(updatedUsers);
+        return this.#setData(updatedUsers);
       })
     );
   }
 
-  deleteUser(userId: string): Observable<void> {
+  deleteUser(userId: string): Observable<User[]> {
     const currentUsers = this.users();
     const updatedUsers = this.#crudService.deleteItem(currentUsers, userId);
-    this.users.set(updatedUsers);
-    return of();
+    return this.#setData(updatedUsers);
+
   }
-  editUser(updatedUser: Partial<User>): Observable<void> {
+  editUser(updatedUser: Partial<User>): Observable<User[]> {
     const currentUsers = this.users();
     const updatedUsers = this.#crudService.editItem(currentUsers, updatedUser);
-    this.users.set(updatedUsers);
-    return of();
+    return this.#setData(updatedUsers);
+
   }
 
-  #setData(users: User[]): void {
+  #setData(users: User[]): Observable<User[]> {
     this.#localStorageService.set(this.STORAGE_KEY, users);
-    this.users.set(users);
+    return of(users);
   }
 }

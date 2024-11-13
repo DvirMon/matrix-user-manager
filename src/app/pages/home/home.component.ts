@@ -11,7 +11,7 @@ import {
   toSignal,
 } from "@angular/core/rxjs-interop";
 import { RouterModule } from "@angular/router";
-import { filter, Observable, switchMap } from "rxjs";
+import { filter, Observable, Subject, switchMap } from "rxjs";
 import { UserFormComponent } from "src/app/components/user-form/user-form.component";
 import { UserTableComponent } from "src/app/components/user-table/user-table.component";
 import { User } from "src/app/models/user";
@@ -41,14 +41,9 @@ export class HomeComponent {
 
   users = this.#userManageService.getUsers();
 
-  #strategy = signal<UserAction | null>(null);
+  strategySubject = new Subject<UserAction | null>();
 
-  strategy$ = toObservable<UserAction | null>(this.#strategy).pipe(
-    filter((action): action is UserAction => !!action),
-    switchMap((action: UserAction) =>
-      this.#userManageService.execute(action as UserAction)
-    )
-  );
+  strategy$ = this.#setStrategy();
 
   columns = [
     { key: "firstName", header: "First Name" },
@@ -61,15 +56,24 @@ export class HomeComponent {
 
   constructor() {
     this.#userManageService
-      .getUsers$()
+      .loadUsers()
       .pipe(takeUntilDestroyed())
       .subscribe((users) => {
         this.users.set(users);
       });
+
+    this.strategy$
+      .pipe(takeUntilDestroyed())
+      .subscribe((users) => this.users.set(users));
   }
-  ngOnInit() {
-    this.strategy$.subscribe((data) => {
-    });
+
+  #setStrategy() {
+    return this.strategySubject.asObservable().pipe(
+      filter((action): action is UserAction => !!action),
+      switchMap((action: UserAction) =>
+        this.#userManageService.execute(action as UserAction)
+      )
+    );
   }
 
   onAddUserEvent(): void {
@@ -78,14 +82,22 @@ export class HomeComponent {
       user: null,
     };
 
-    this.#strategy.set(strategy);
+    this.strategySubject.next(strategy);
   }
 
   onEditUserEvent(user: User): void {
-    this.#strategy.set({ type: ActionType.EDIT, user });
+    const strategy = {
+      type: ActionType.EDIT,
+      user,
+    };
+    this.strategySubject.next(strategy);
   }
 
   onDeleteUserEvent(user: User): void {
-    this.#strategy.set({ type: ActionType.DELETE, user });
+    const strategy = {
+      type: ActionType.DELETE,
+      user,
+    };
+    this.strategySubject.next(strategy);
   }
 }

@@ -13,7 +13,10 @@ export enum ActionType {
   providedIn: "root",
 })
 export class UserStrategyService {
-  #strategyMap = new Map<ActionType, (user: User | null) => Observable<void>>();
+  #strategyMap = new Map<
+    ActionType,
+    (user: User | null) => Observable<User[]>
+  >();
 
   #userService = inject(AbstractUsersService);
   #dialogService = inject(UserDialogService);
@@ -36,11 +39,11 @@ export class UserStrategyService {
         return this.#userService.deleteUser(user.id);
       }
 
-      return of();
+      return of([] as User[]);
     });
   }
 
-  execute(type: ActionType, user: User | null): Observable<void> {
+  execute(type: ActionType, user: User | null): Observable<User[]> {
     const strategy = this.#strategyMap.get(type);
     if (strategy) {
       return strategy(user);
@@ -52,8 +55,8 @@ export class UserStrategyService {
 
   #openDialogThenExecute(
     dialogConfig: { mode: ActionType; user: User | null },
-    action: (user: User) => Observable<void>
-  ): Observable<void> {
+    action: (user: User) => Observable<User[]>
+  ): Observable<User[]> {
     const dialogRef = this.#dialogService.open(dialogConfig);
     return dialogRef.afterClosed().pipe(
       filter((result: unknown | undefined) => !!result),

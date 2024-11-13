@@ -5,11 +5,10 @@ import { User } from "src/app/models/user";
 
 export abstract class AbstractUsersService {
 
-  protected users = signal<User[]>([]);
+  users = signal<User[]>([]);
 
-  abstract getUsers(): WritableSignal<User[]>;
-  abstract getUsers$(): Observable<User[]>;
-  abstract addUser(user: User): Observable<void>;
-  abstract editUser(updatedUserData: Partial<User>): Observable<void>;
-  abstract deleteUser(userId: string): Observable<void>;
+  abstract loadUsers(): Observable<User[]>;
+  abstract addUser(user: User): Observable<User[]>;
+  abstract editUser(updatedUserData: Partial<User>): Observable<User[]>;
+  abstract deleteUser(userId: string): Observable<User[]>;
 }

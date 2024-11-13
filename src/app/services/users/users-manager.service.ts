@@ -17,14 +17,18 @@ export class UsersManagerService {
   #userService = inject(AbstractUsersService);
 
   getUsers(): WritableSignal<User[]> {
-    return this.#userService.getUsers();
+    return this.#userService.users;
   }
 
-  getUsers$(): Observable<User[]> {
-    return this.#userService.getUsers$();
+  setUsers(users: User[]): void {
+    return this.#userService.users.update((data) => [...data, ...users]);
   }
 
-  execute(action: UserAction): Observable<void> {
+  loadUsers(): Observable<User[]> {
+    return this.#userService.loadUsers();
+  }
+
+  execute(action: UserAction): Observable<User[]> {
     return this.#userStrategyService.execute(action.type, action.user);
   }
 }

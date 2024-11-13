@@ -16,16 +16,11 @@ export class UsersRemoteService extends AbstractUsersService {
 
   #http = inject(HttpClient);
 
-  override getUsers(): WritableSignal<User[]> {
-    return this.users;
-  }
-
-  getUsers$(): Observable<User[]> {
+  loadUsers(): Observable<User[]> {
     return this.#http.get<User[]>(this.apiUrl);
   }
 
-  addUser(user: User): Observable<void> {
-
+  addUser(user: User): Observable<User[]> {
     return this.#http.post<User>(this.apiUrl, user).pipe(
       map((userWithId) => {
         const currentUsers = this.users();
@@ -33,22 +28,22 @@ export class UsersRemoteService extends AbstractUsersService {
           currentUsers,
           userWithId
         );
-        this.users.set(updatedUsers);
+        return updatedUsers;
       })
     );
   }
 
-  deleteUser(userId: string): Observable<void> {
+  deleteUser(userId: string): Observable<User[]> {
     return this.#http.delete<void>(`${this.apiUrl}/${userId}`).pipe(
       map((_) => {
         const currentUsers = this.users();
         const updatedUsers = this.#crudService.deleteItem(currentUsers, userId);
-        this.users.set(updatedUsers);
+        return updatedUsers;
       })
     );
   }
 
-  editUser(partialUser: Partial<User>): Observable<void> {
+  editUser(partialUser: Partial<User>): Observable<User[]> {
     const url = `${this.apiUrl}/${partialUser.id}`;
 
     return this.#http.patch<User>(url, partialUser).pipe(
@@ -58,7 +53,7 @@ export class UsersRemoteService extends AbstractUsersService {
           currentUsers,
           updatedUser
         );
-        this.users.set(updatedUsers);
+        return updatedUsers;
       })
     );
   }
