@@ -64,13 +64,11 @@ export class HomeComponent {
       .getUsers$()
       .pipe(takeUntilDestroyed())
       .subscribe((users) => {
-        console.log("users", users);
         this.users.set(users);
       });
   }
   ngOnInit() {
     this.strategy$.subscribe((data) => {
-      console.log(data);
     });
   }
 

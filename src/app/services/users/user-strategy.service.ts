@@ -57,7 +57,6 @@ export class UserStrategyService {
     const dialogRef = this.#dialogService.open(dialogConfig);
     return dialogRef.afterClosed().pipe(
       filter((result: unknown | undefined) => !!result),
-      tap(() => console.log("called")),
       switchMap((result: unknown) => action(result as User))
     );
   }

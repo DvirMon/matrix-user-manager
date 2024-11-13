@@ -10,8 +10,6 @@ export class LocalStorageService {
   set$(key: string, users: User[]): Observable<void> {
     return of(null).pipe(
       map(() => {
-        console.log(users);
-        console.log(superjson.stringify(users));
         localStorage.setItem(key, superjson.stringify(users));
       }),
       catchError((error) => {
@@ -24,13 +22,11 @@ export class LocalStorageService {
     localStorage.setItem(key, superjson.stringify(users));
   }
 
-  
+
   load$(key: string): Observable<unknown> {
     return of(null).pipe(
       map(() => {
         const data = localStorage.getItem(key);
-        console.log(data);
-        // console.log(superjson.parse(data as string))
         return data ? superjson.parse(data) : null;
       }),
       filter((data) => data !== null)

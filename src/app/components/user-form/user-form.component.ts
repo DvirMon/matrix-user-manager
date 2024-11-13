@@ -97,7 +97,6 @@ export class UserFormComponent implements OnInit {
 
   onSave(): void {
     const updateUser = { ...this.user, ...this.userForm.value };
-    console.log(updateUser)
     this.#dialogRef.close(updateUser);
   }
 

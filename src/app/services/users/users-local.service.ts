@@ -17,7 +17,6 @@ export class UsersLocalService extends AbstractUsersService {
   #crudService = inject(CrudService);
 
   override getUsers(): WritableSignal<User[]> {
-    console.log(this.users());
     return this.users;
   }
 
