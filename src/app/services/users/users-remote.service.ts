@@ -25,6 +25,9 @@ export class UsersRemoteService extends AbstractUsersService {
   }
 
   addUser(user: User): Observable<void> {
+
+    console.log('remote called')
+
     return this.#http.post<User>(this.apiUrl, user).pipe(
       map((userWithId) => {
         const currentUsers = this.users();

@@ -1,9 +1,8 @@
-import { inject, Injectable, Signal, WritableSignal } from "@angular/core";
+import { inject, Injectable, WritableSignal } from "@angular/core";
 import { Observable } from "rxjs";
 import { User } from "../../models/user";
 import { AbstractUsersService } from "./abstract-users.service";
 import { ActionType, UserStrategyService } from "./user-strategy.service";
-import { toSignal } from "@angular/core/rxjs-interop";
 
 export interface UserAction {
   type: ActionType;

@@ -5,7 +5,11 @@ import {
   inject,
   signal,
 } from "@angular/core";
-import { toObservable, toSignal } from "@angular/core/rxjs-interop";
+import {
+  takeUntilDestroyed,
+  toObservable,
+  toSignal,
+} from "@angular/core/rxjs-interop";
 import { RouterModule } from "@angular/router";
 import { filter, Observable, switchMap } from "rxjs";
 import { UserFormComponent } from "src/app/components/user-form/user-form.component";
@@ -37,8 +41,6 @@ export class HomeComponent {
 
   users = this.#userManageService.getUsers();
 
-
-  
   #strategy = signal<UserAction | null>(null);
 
   strategy$ = toObservable<UserAction | null>(this.#strategy).pipe(
@@ -47,8 +49,6 @@ export class HomeComponent {
       this.#userManageService.execute(action as UserAction)
     )
   );
-
-  execute = toSignal(this.strategy$);
 
   columns = [
     { key: "firstName", header: "First Name" },
@@ -59,9 +59,18 @@ export class HomeComponent {
     { key: "city", header: "City" },
   ];
 
+  constructor() {
+    this.#userManageService
+      .getUsers$()
+      .pipe(takeUntilDestroyed())
+      .subscribe((users) => {
+        console.log("users", users);
+        this.users.set(users);
+      });
+  }
   ngOnInit() {
-    this.#userManageService.getUsers$().subscribe((users) => {
-      this.users.set(users);
+    this.strategy$.subscribe((data) => {
+      console.log(data);
     });
   }
 

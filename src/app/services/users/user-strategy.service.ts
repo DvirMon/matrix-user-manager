@@ -22,15 +22,13 @@ export class UserStrategyService {
     this.#strategyMap.set(ActionType.ADD, (user: User | null) =>
       this.#openDialogThenExecute(
         { mode: ActionType.ADD, user },
-        (userData: User) =>
-          this.#userService.addUser(userData).pipe(map(() => void 0))
+        (userData: User) => this.#userService.addUser(userData)
       )
     );
     this.#strategyMap.set(ActionType.EDIT, (user: User | null) =>
       this.#openDialogThenExecute(
         { mode: ActionType.EDIT, user },
-        (userData: User) =>
-          this.#userService.editUser(userData).pipe(map(() => void 0))
+        (userData: User) => this.#userService.editUser(userData)
       )
     );
     this.#strategyMap.set(ActionType.DELETE, (user: User | null) => {
@@ -59,6 +57,7 @@ export class UserStrategyService {
     const dialogRef = this.#dialogService.open(dialogConfig);
     return dialogRef.afterClosed().pipe(
       filter((result: unknown | undefined) => !!result),
+      tap(() => console.log("called")),
       switchMap((result: unknown) => action(result as User))
     );
   }
