@@ -2,7 +2,6 @@ import { AsyncPipe, NgIf } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { Observable } from "rxjs";
-import { UserFormComponent } from "src/app/components/user-form/user-form.component";
 import { UserTableComponent } from "src/app/components/user-table/user-table.component";
 import { User } from "src/app/models/user";
 import { ActionType } from "src/app/services/users/user-strategy.service";
@@ -16,7 +15,6 @@ import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float
         AsyncPipe,
         RouterModule,
         FloatIconButtonComponent,
-        UserFormComponent,
         UserTableComponent,
     ],
     templateUrl: "./home.component.html",
