@@ -4,9 +4,9 @@
       <mat-label>First Name</mat-label>
       <input matInput autocomplete="off" formControlName="firstName" required />
       @if (messages$ | async; as messages) {
-        <mat-error>
-          {{ messages["firstName"] }}
-        </mat-error>
+      <mat-error>
+        {{ messages["firstName"] }}
+      </mat-error>
       }
     </mat-form-field>
 
@@ -14,9 +14,9 @@
       <mat-label>Last Name</mat-label>
       <input matInput autocomplete="off" formControlName="lastName" required />
       @if (messages$ | async; as messages) {
-        <mat-error>
-          {{ messages["lastName"] }}
-        </mat-error>
+      <mat-error>
+        {{ messages["lastName"] }}
+      </mat-error>
       }
     </mat-form-field>
   </div>
@@ -31,9 +31,9 @@
         formControlName="age"
         required />
       @if (messages$ | async; as messages) {
-        <mat-error>
-          {{ messages["age"] }}
-        </mat-error>
+      <mat-error>
+        {{ messages["age"] }}
+      </mat-error>
       }
     </mat-form-field>
 
@@ -44,11 +44,11 @@
         <mat-option value="male">Male</mat-option>
         <mat-option value="other">Other</mat-option>
       </mat-select>
-      @if (messages$ | async; as messages) {
-        <mat-error>
-          {{ messages["gender"] }}
-        </mat-error>
-      }
+      <mat-error>
+        @if (messages$ | async; as messages) {
+        {{ messages["gender"] }}
+        }
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -67,16 +67,15 @@
         required />
       <mat-autocomplete #auto="matAutocomplete">
         @for (country of filteredCountries$ | async; track country) {
-          <mat-option
-            [value]="country">
-            {{ country }}
-          </mat-option>
+        <mat-option [value]="country">
+          {{ country }}
+        </mat-option>
         }
       </mat-autocomplete>
       @if (messages$ | async; as messages) {
-        <mat-error>
-          {{ messages["country"] }}
-        </mat-error>
+      <mat-error>
+        {{ messages["country"] }}
+      </mat-error>
       }
     </mat-form-field>
 
@@ -88,23 +87,17 @@
         formControlName="city"
         required />
       @if (messages$ | async; as messages) {
-        <mat-error>
-          {{ messages["city"] }}
-        </mat-error>
+      <mat-error>
+        {{ messages["city"] }}
+      </mat-error>
       }
     </mat-form-field>
   </div>
 
   <div class="form-actions">
     <button mat-button type="button" (click)="onCancel()">Close</button>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="onSave()">
-      Save
-    </button>
+    <button mat-raised-button color="primary" (click)="onSave()">Save</button>
   </div>
 </form>
-
 
 <!-- [disabled]="userForm.invalid || userForm.pristine" -->

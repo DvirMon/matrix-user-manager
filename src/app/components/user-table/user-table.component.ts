@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from "@angular/common";
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -14,7 +14,7 @@ import { UserTableService } from "./user-table.service";
 
 @Component({
   selector: "app-user-table",
-  imports: [NgIf, NgFor, MatTableModule, MatButtonModule, MatIconModule],
+  imports: [MatTableModule, MatButtonModule, MatIconModule],
   templateUrl: "./user-table.component.html",
   styleUrls: ["./user-table.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
