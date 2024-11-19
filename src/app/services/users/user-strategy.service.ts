@@ -22,13 +22,13 @@ export class UserStrategyService {
     this.#strategyMap.set(ActionType.ADD, (user: User) =>
       this.#openDialogThenExecute(
         { mode: ActionType.ADD, user },
-        (user: User) => this.#userService.addUser(user).pipe(map(() => void 0))
+        (user: User) => this.#userService.addUser(user)
       )
     );
     this.#strategyMap.set(ActionType.EDIT, (user: User) =>
       this.#openDialogThenExecute(
         { mode: ActionType.EDIT, user },
-        (user: User) => this.#userService.editUser(user).pipe(map(() => void 0))
+        (user: User) => this.#userService.editUser(user)
       )
     );
     this.#strategyMap.set(ActionType.DELETE, (user: User) => {
