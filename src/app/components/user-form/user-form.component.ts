@@ -35,25 +35,24 @@ import { provideUserMessageManger } from "./user-form-error.service";
 import { UserFormService } from "./user-form.service";
 
 @Component({
-  selector: "app-user-form",
-  standalone: true,
-  imports: [
-    NgIf,
-    NgFor,
-    AsyncPipe,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatSelectModule,
-    MatButtonModule,
-    OptionValidationDirective,
-  ],
-  templateUrl: "./user-form.component.html",
-  styleUrls: ["./user-form.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [FormErrorService, provideUserMessageManger()],
+    selector: "app-user-form",
+    imports: [
+        NgIf,
+        NgFor,
+        AsyncPipe,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        MatSelectModule,
+        MatButtonModule,
+        OptionValidationDirective,
+    ],
+    templateUrl: "./user-form.component.html",
+    styleUrls: ["./user-form.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [FormErrorService, provideUserMessageManger()]
 })
 export class UserFormComponent implements OnInit {
   @Input() user: Partial<User> | undefined = {};

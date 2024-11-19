@@ -15,13 +15,12 @@ import { User } from "src/app/models/user";
 import { UserTableService } from "./user-table.service";
 
 @Component({
-  selector: "app-user-table",
-  standalone: true,
-  imports: [CommonModule, MatTableModule, MatButtonModule, MatIconModule],
-  templateUrl: "./user-table.component.html",
-  styleUrls: ["./user-table.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [UserTableService],
+    selector: "app-user-table",
+    imports: [CommonModule, MatTableModule, MatButtonModule, MatIconModule],
+    templateUrl: "./user-table.component.html",
+    styleUrls: ["./user-table.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [UserTableService]
 })
 export class UserTableComponent {
   #tableService = inject(UserTableService);

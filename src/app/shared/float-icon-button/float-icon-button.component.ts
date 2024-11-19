@@ -11,18 +11,17 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 
 @Component({
-  selector: "app-float-icon-button",
-  standalone: true,
-  imports: [NgStyle, MatButtonModule, MatIconModule],
-  template: `<button
+    selector: "app-float-icon-button",
+    imports: [NgStyle, MatButtonModule, MatIconModule],
+    template: `<button
     mat-fab
     (click)="clickEvent.emit()"
     [ngStyle]="buttonStyles"
     aria-label="Floating action button">
     <mat-icon [fontIcon]="icon"></mat-icon>
   </button> `,
-  styleUrls: ["./float-icon-button.component.scss"],
-  changeDetection : ChangeDetectionStrategy.OnPush
+    styleUrls: ["./float-icon-button.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FloatIconButtonComponent implements OnInit {
   #icon: string = "add";

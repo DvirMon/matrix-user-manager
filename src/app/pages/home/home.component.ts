@@ -10,20 +10,19 @@ import { UsersManagerService } from "src/app/services/users/users-manager.servic
 import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float-icon-button.component";
 
 @Component({
-  selector: "app-home",
-  standalone: true,
-  imports: [
-    NgIf,
-    AsyncPipe,
-    RouterModule,
-    FloatIconButtonComponent,
-    UserFormComponent,
-    UserTableComponent,
-  ],
-  templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [],
+    selector: "app-home",
+    imports: [
+        NgIf,
+        AsyncPipe,
+        RouterModule,
+        FloatIconButtonComponent,
+        UserFormComponent,
+        UserTableComponent,
+    ],
+    templateUrl: "./home.component.html",
+    styleUrls: ["./home.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: []
 })
 export class HomeComponent {
   #userManageService = inject(UsersManagerService);

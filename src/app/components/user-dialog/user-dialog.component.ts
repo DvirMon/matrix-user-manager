@@ -10,12 +10,11 @@ export interface UserDialogData {
 }
 
 @Component({
-  selector: "app-user-dialog",
-  standalone: true,
-  imports: [UserFormComponent],
-  templateUrl: "./user-dialog.component.html",
-  styleUrls: ["./user-dialog.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-user-dialog",
+    imports: [UserFormComponent],
+    templateUrl: "./user-dialog.component.html",
+    styleUrls: ["./user-dialog.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserDialogComponent {
   dialogRef: MatDialogRef<UserDialogComponent> = inject(MatDialogRef);
