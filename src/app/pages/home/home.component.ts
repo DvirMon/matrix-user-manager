@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { Observable } from "rxjs";
@@ -11,12 +11,11 @@ import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float
 @Component({
     selector: "app-home",
     imports: [
-        NgIf,
-        AsyncPipe,
-        RouterModule,
-        FloatIconButtonComponent,
-        UserTableComponent,
-    ],
+    AsyncPipe,
+    RouterModule,
+    FloatIconButtonComponent,
+    UserTableComponent
+],
     templateUrl: "./home.component.html",
     styleUrls: ["./home.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,

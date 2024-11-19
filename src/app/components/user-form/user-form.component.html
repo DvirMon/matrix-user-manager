@@ -3,17 +3,21 @@
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>First Name</mat-label>
       <input matInput autocomplete="off" formControlName="firstName" required />
-      <mat-error *ngIf="messages$ | async as messages">
-        {{ messages["firstName"] }}
-      </mat-error>
+      @if (messages$ | async; as messages) {
+        <mat-error>
+          {{ messages["firstName"] }}
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>Last Name</mat-label>
       <input matInput autocomplete="off" formControlName="lastName" required />
-      <mat-error *ngIf="messages$ | async as messages">
-        {{ messages["lastName"] }}
-      </mat-error>
+      @if (messages$ | async; as messages) {
+        <mat-error>
+          {{ messages["lastName"] }}
+        </mat-error>
+      }
     </mat-form-field>
   </div>
 
@@ -26,9 +30,11 @@
         type="number"
         formControlName="age"
         required />
-      <mat-error *ngIf="messages$ | async as messages">
-        {{ messages["age"] }}
-      </mat-error>
+      @if (messages$ | async; as messages) {
+        <mat-error>
+          {{ messages["age"] }}
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field class="form-field" appearance="fill">
@@ -38,9 +44,11 @@
         <mat-option value="male">Male</mat-option>
         <mat-option value="other">Other</mat-option>
       </mat-select>
-      <mat-error *ngIf="messages$ | async as messages">
-        {{ messages["gender"] }}
-      </mat-error>
+      @if (messages$ | async; as messages) {
+        <mat-error>
+          {{ messages["gender"] }}
+        </mat-error>
+      }
     </mat-form-field>
   </div>
 
@@ -58,15 +66,18 @@
         [list]="filteredCountries$ | async"
         required />
       <mat-autocomplete #auto="matAutocomplete">
-        <mat-option
-          *ngFor="let country of filteredCountries$ | async as countries"
-          [value]="country">
-          {{ country }}
-        </mat-option>
+        @for (country of filteredCountries$ | async; track country) {
+          <mat-option
+            [value]="country">
+            {{ country }}
+          </mat-option>
+        }
       </mat-autocomplete>
-      <mat-error *ngIf="messages$ | async as messages">
-        {{ messages["country"] }}
-      </mat-error>
+      @if (messages$ | async; as messages) {
+        <mat-error>
+          {{ messages["country"] }}
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field class="form-field" appearance="fill">
@@ -76,9 +87,11 @@
         autocomplete="new-password"
         formControlName="city"
         required />
-      <mat-error *ngIf="messages$ | async as messages">
-        {{ messages["city"] }}
-      </mat-error>
+      @if (messages$ | async; as messages) {
+        <mat-error>
+          {{ messages["city"] }}
+        </mat-error>
+      }
     </mat-form-field>
   </div>
 

@@ -1,4 +1,4 @@
-import { AsyncPipe, NgFor, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -37,18 +37,16 @@ import { UserFormService } from "./user-form.service";
 @Component({
     selector: "app-user-form",
     imports: [
-        NgIf,
-        NgFor,
-        AsyncPipe,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatAutocompleteModule,
-        MatSelectModule,
-        MatButtonModule,
-        OptionValidationDirective,
-    ],
+    AsyncPipe,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatSelectModule,
+    MatButtonModule,
+    OptionValidationDirective
+],
     templateUrl: "./user-form.component.html",
     styleUrls: ["./user-form.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
