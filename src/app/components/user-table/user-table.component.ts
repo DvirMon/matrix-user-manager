@@ -1,4 +1,3 @@
-
 import {
   ChangeDetectionStrategy,
   Component,
@@ -25,6 +24,8 @@ export class UserTableComponent {
   deleteEvent = output<User>();
 
   data = input.required<User[]>();
+
+  hasUsers = computed(() => this.data().length > 0);
 
   columns = input.required<{ key: string; header: string }[]>();
 

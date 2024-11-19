@@ -27,7 +27,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
   </table>
 
-  @if (data.length === 0) {
+  @if (!hasUsers()) {
     <div class="no-users-message">No Users</div>
   }
 </div>
