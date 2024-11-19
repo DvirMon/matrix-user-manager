@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { catchError, map, Observable, of } from "rxjs";
+import { catchError, filter, map, Observable, of } from "rxjs";
 import { User } from "src/app/models/user";
 import superjson from "superjson";
 
@@ -7,8 +7,7 @@ import superjson from "superjson";
   providedIn: "root",
 })
 export class LocalStorageService {
-
-  set(key: string, users: User[]): Observable<void> {
+  set$(key: string, users: User[]): Observable<void> {
     return of(null).pipe(
       map(() => {
         localStorage.setItem(key, superjson.stringify(users));
@@ -19,17 +18,28 @@ export class LocalStorageService {
       })
     );
   }
-  load(key: string): Observable<unknown> {
+  set(key: string, users: User[]): void {
+    localStorage.setItem(key, superjson.stringify(users));
+  }
+
+
+  load$(key: string): Observable<unknown> {
     return of(null).pipe(
       map(() => {
         const data = localStorage.getItem(key);
         return data ? superjson.parse(data) : null;
       }),
-      catchError((error) => {
-        console.error("Error loading from localStorage:", error);
-        throw error;
-      })
+      filter((data) => data !== null)
+      // catchError((error) => {
+      //   console.error("Error loading from localStorage:", error);
+      //   throw error;
+      // })
     );
+  }
+
+  load(key: string): unknown | null {
+    const data = localStorage.getItem(key);
+    return data ? superjson.parse(data) : null;
   }
 
   clear(key: string): void {

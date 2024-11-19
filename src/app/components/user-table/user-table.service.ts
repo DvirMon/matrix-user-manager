@@ -10,13 +10,11 @@ export class UserTableService {
   #columnsSubject = new BehaviorSubject<{ key: string; header: string }[]>([]);
   #hasActionsSubject = new BehaviorSubject<boolean>(true);
 
-  // Public observables for components to subscribe to
   data$: Observable<User[]> = this.#dataSubject.asObservable();
   columns$: Observable<{ key: string; header: string }[]> =
     this.#columnsSubject.asObservable();
   hasActions$: Observable<boolean> = this.#hasActionsSubject.asObservable();
 
-  // Combined observable for dynamically calculated displayed columns
   displayedColumns$: Observable<string[]> = combineLatest([
     this.#columnsSubject,
     this.#hasActionsSubject,

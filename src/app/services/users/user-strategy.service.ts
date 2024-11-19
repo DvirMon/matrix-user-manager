@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { filter, map, Observable, of, switchMap } from "rxjs";
+import { filter, map, Observable, of, switchMap, tap } from "rxjs";
 import { UserDialogService } from "../../components/user-dialog/user-dialog.service";
 import { User } from "../../models/user";
 import { AbstractUsersService } from "./abstract-users.service";
@@ -13,30 +13,37 @@ export enum ActionType {
   providedIn: "root",
 })
 export class UserStrategyService {
-  #strategyMap = new Map<ActionType, (user: User) => Observable<void>>();
+  #strategyMap = new Map<
+    ActionType,
+    (user: User | null) => Observable<User[]>
+  >();
 
   #userService = inject(AbstractUsersService);
   #dialogService = inject(UserDialogService);
 
   constructor() {
-    this.#strategyMap.set(ActionType.ADD, (user: User) =>
+    this.#strategyMap.set(ActionType.ADD, (user: User | null) =>
       this.#openDialogThenExecute(
         { mode: ActionType.ADD, user },
-        (user: User) => this.#userService.addUser(user).pipe(map(() => void 0))
+        (userData: User) => this.#userService.addUser(userData)
       )
     );
-    this.#strategyMap.set(ActionType.EDIT, (user: User) =>
+    this.#strategyMap.set(ActionType.EDIT, (user: User | null) =>
       this.#openDialogThenExecute(
         { mode: ActionType.EDIT, user },
-        (user: User) => this.#userService.editUser(user).pipe(map(() => void 0))
+        (userData: User) => this.#userService.editUser(userData)
       )
     );
-    this.#strategyMap.set(ActionType.DELETE, (user: User) => {
-      return this.#userService.deleteUser(user.id);
+    this.#strategyMap.set(ActionType.DELETE, (user: User | null) => {
+      if (user) {
+        return this.#userService.deleteUser(user.id);
+      }
+
+      return of([] as User[]);
     });
   }
 
-  execute(type: ActionType, user: User): Observable<void> {
+  execute(type: ActionType, user: User | null): Observable<User[]> {
     const strategy = this.#strategyMap.get(type);
     if (strategy) {
       return strategy(user);
@@ -47,12 +54,12 @@ export class UserStrategyService {
   }
 
   #openDialogThenExecute(
-    dialogConfig: { mode: ActionType; user: User },
-    action: (user: User) => Observable<void>
-  ): Observable<void> {
+    dialogConfig: { mode: ActionType; user: User | null },
+    action: (user: User) => Observable<User[]>
+  ): Observable<User[]> {
     const dialogRef = this.#dialogService.open(dialogConfig);
     return dialogRef.afterClosed().pipe(
-      filter((result: unknown | undefined) => !result),
+      filter((result: unknown | undefined) => !!result),
       switchMap((result: unknown) => action(result as User))
     );
   }

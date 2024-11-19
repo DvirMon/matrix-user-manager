@@ -1,11 +1,21 @@
 import { AsyncPipe } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject
+} from "@angular/core";
+import {
+  takeUntilDestroyed
+} from "@angular/core/rxjs-interop";
 import { RouterModule } from "@angular/router";
-import { Observable } from "rxjs";
+import { filter, Subject, switchMap } from "rxjs";
 import { UserTableComponent } from "src/app/components/user-table/user-table.component";
 import { User } from "src/app/models/user";
 import { ActionType } from "src/app/services/users/user-strategy.service";
-import { UsersManagerService } from "src/app/services/users/users-manager.service";
+import {
+  UserAction,
+  UsersManagerService,
+} from "src/app/services/users/users-manager.service";
 import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float-icon-button.component";
 
 @Component({
@@ -24,10 +34,11 @@ import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float
 export class HomeComponent {
   #userManageService = inject(UsersManagerService);
 
-  users$ = this.#userManageService.getUsers$();
+  users = this.#userManageService.getUsers();
 
-  // trigger logic in the template
-  strategyTrigger$: Observable<void>;
+  strategySubject = new Subject<UserAction | null>();
+
+  strategy$ = this.#setStrategy();
 
   columns = [
     { key: "firstName", header: "First Name" },
@@ -39,21 +50,49 @@ export class HomeComponent {
   ];
 
   constructor() {
-    this.strategyTrigger$ = this.#userManageService.executeStrategy();
+    this.#userManageService
+      .loadUsers()
+      .pipe(takeUntilDestroyed())
+      .subscribe((users) => {
+        this.users.set(users);
+      });
+
+    this.strategy$
+      .pipe(takeUntilDestroyed())
+      .subscribe((users) => this.users.set(users));
+  }
+
+  #setStrategy() {
+    return this.strategySubject.asObservable().pipe(
+      filter((action): action is UserAction => !!action),
+      switchMap((action: UserAction) =>
+        this.#userManageService.execute(action as UserAction)
+      )
+    );
   }
 
   onAddUserEvent(): void {
-    this.#userManageService.emitStrategy({
+    const strategy = {
       type: ActionType.ADD,
       user: null,
-    });
+    };
+
+    this.strategySubject.next(strategy);
   }
 
   onEditUserEvent(user: User): void {
-    this.#userManageService.emitStrategy({ type: ActionType.EDIT, user });
+    const strategy = {
+      type: ActionType.EDIT,
+      user,
+    };
+    this.strategySubject.next(strategy);
   }
 
   onDeleteUserEvent(user: User): void {
-    this.#userManageService.emitStrategy({ type: ActionType.DELETE, user });
+    const strategy = {
+      type: ActionType.DELETE,
+      user,
+    };
+    this.strategySubject.next(strategy);
   }
 }

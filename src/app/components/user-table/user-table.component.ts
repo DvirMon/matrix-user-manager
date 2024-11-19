@@ -1,52 +1,39 @@
-import { CommonModule } from "@angular/common";
+import { NgFor, NgIf } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  inject,
-  Input,
-  Output
+  computed,
+  input,
+  output,
 } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { MatTableModule } from '@angular/material/table';
-import { Observable } from "rxjs";
+import { MatTableModule } from "@angular/material/table";
 import { User } from "src/app/models/user";
 import { UserTableService } from "./user-table.service";
 
 @Component({
-    selector: "app-user-table",
-    imports: [CommonModule, MatTableModule, MatButtonModule, MatIconModule],
-    templateUrl: "./user-table.component.html",
-    styleUrls: ["./user-table.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [UserTableService]
+  selector: "app-user-table",
+  imports: [NgIf, NgFor, MatTableModule, MatButtonModule, MatIconModule],
+  templateUrl: "./user-table.component.html",
+  styleUrls: ["./user-table.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [UserTableService],
 })
 export class UserTableComponent {
-  #tableService = inject(UserTableService);
+  editEvent = output<User>();
+  deleteEvent = output<User>();
 
-  @Output() editEvent = new EventEmitter<User>();
-  @Output() deleteEvent = new EventEmitter<User>();
+  data = input.required<User[]>();
 
-  data$: Observable<User[]> = this.#tableService.data$;
-  columns$: Observable<{ key: string; header: string }[]> =
-    this.#tableService.columns$;
-  displayedColumns$: Observable<string[]> =
-    this.#tableService.displayedColumns$;
-  hasActions$: Observable<boolean> = this.#tableService.hasActions$;
+  columns = input.required<{ key: string; header: string }[]>();
 
-  // Input setters call the service methods to update state
-  @Input() set data(value: User[] | null) {
-    this.#tableService.setData(value || []);
-  }
+  hasActions = input<boolean>(true);
 
-  @Input() set columns(value: { key: string; header: string }[]) {
-    this.#tableService.setColumns(value || []);
-  }
-
-  @Input() set hasActions(value: boolean) {
-    this.#tableService.setHasActions(value);
-  }
+  displayedColumns = computed(() => {
+    const columnKeys = this.columns().map((col) => col.key);
+    return this.hasActions() ? [...columnKeys, "actions"] : columnKeys;
+  });
 
   onEdit(row: User): void {
     this.editEvent.emit(row);
