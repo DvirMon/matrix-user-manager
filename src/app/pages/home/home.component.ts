@@ -1,12 +1,5 @@
-import { AsyncPipe } from "@angular/common";
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject
-} from "@angular/core";
-import {
-  takeUntilDestroyed
-} from "@angular/core/rxjs-interop";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RouterModule } from "@angular/router";
 import { filter, Subject, switchMap } from "rxjs";
 import { UserTableComponent } from "src/app/components/user-table/user-table.component";
@@ -19,17 +12,11 @@ import {
 import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float-icon-button.component";
 
 @Component({
-    selector: "app-home",
-    imports: [
-    AsyncPipe,
-    RouterModule,
-    FloatIconButtonComponent,
-    UserTableComponent
-],
-    templateUrl: "./home.component.html",
-    styleUrls: ["./home.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: []
+  selector: "app-home",
+  imports: [RouterModule, FloatIconButtonComponent, UserTableComponent],
+  templateUrl: "./home.component.html",
+  styleUrls: ["./home.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
   #userManageService = inject(UsersManagerService);
