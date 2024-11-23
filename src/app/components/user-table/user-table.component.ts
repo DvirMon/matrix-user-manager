@@ -23,9 +23,12 @@ export class UserTableComponent {
   editEvent = output<User>();
   deleteEvent = output<User>();
 
-  data = input.required<User[]>();
+  data = input.required<User[] | undefined>();
 
-  hasUsers = computed(() => this.data().length > 0);
+  dataSource = computed(() =>
+    this.data() !== undefined ? (this.data() as User[]) : []
+  );
+  hasUsers = computed(() => this.dataSource().length > 0);
 
   columns = input.required<{ key: string; header: string }[]>();
 
