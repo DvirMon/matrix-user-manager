@@ -1,25 +1,51 @@
-import { inject } from "@angular/core";
-import { FormGroup, ValidationErrors } from "@angular/forms";
+import { inject, Injector, runInInjectionContext, Signal } from "@angular/core";
+import { AbstractControl, FormGroup, ValidationErrors } from "@angular/forms";
 import { Observable } from "rxjs";
 import {
   distinctUntilChanged,
+  filter,
   map,
   shareReplay,
   startWith,
 } from "rxjs/operators";
 import { MessageManager } from "../utils/messages-manger";
+import { toSignal } from "@angular/core/rxjs-interop";
 
 export class FormErrorService {
   #messageManager = inject(MessageManager);
 
-  getMessages$(form: FormGroup): Observable<ValidationErrors> {
-    const errors$ = form.statusChanges.pipe(startWith(form.status)).pipe(
-      map(() => this.#getFormErrors(form)),
-      distinctUntilChanged((prev, curr) => this.#areErrorsEqual(prev, curr))
-    );
+  #injector = inject(Injector);
 
-    return errors$.pipe(
-      map((errors) => this.#mapErrorsToMessages(errors)),
+  setErrors(form: FormGroup) {
+    return runInInjectionContext(this.#injector, () => this.getErrors(form));
+  }
+
+  getErrors(form: FormGroup): { [key: string]: Signal<string> } {
+    const controlErrorStreams: { [key: string]: Signal<string> } = {};
+
+    Object.keys(form.controls).forEach((key) => {
+      const control = form.get(key);
+      if (control) {
+        controlErrorStreams[key] = toSignal(
+          this.#getControlMessageStream(control, key),
+          { initialValue: "" }
+        );
+      }
+    });
+
+    return controlErrorStreams;
+  }
+
+  #getControlMessageStream(
+    control: AbstractControl,
+    controlName: string
+  ): Observable<string> {
+    return control.statusChanges.pipe(
+      startWith(control.status),
+      map(() => control.errors),
+      filter((errors) => errors !== null),
+      distinctUntilChanged((prev, curr) => this.#areErrorsEqual(prev, curr)),
+      map((errors) => this.#getFirstErrorMessage(controlName, errors)),
       shareReplay(1)
     );
   }
@@ -31,28 +57,18 @@ export class FormErrorService {
     return JSON.stringify(prevErrors) === JSON.stringify(currErrors);
   }
 
-  #getFormErrors(form: FormGroup): ValidationErrors {
-    const errors: ValidationErrors = {};
-    Object.keys(form.controls).forEach((key: string) => {
-      const controlErrors = form.get(key)?.errors;
-      if (controlErrors) {
-        errors[key] = controlErrors;
-      }
-    });
-    return errors;
-  }
-
-  #mapErrorsToMessages(errors: ValidationErrors): {
-    [key: string]: string;
-  } {
-    return Object.entries(errors).reduce((messages, [key, controlErrors]) => {
-      const firstErrorKey = Object.keys(controlErrors)[0];
-      messages[key] = this.#messageManager.getErrorMessage(
-        key,
+  #getFirstErrorMessage(
+    controlName: string,
+    errors: ValidationErrors | null
+  ): string {
+    if (errors) {
+      const firstErrorKey = Object.keys(errors)[0];
+      return this.#messageManager.getErrorMessage(
+        controlName,
         firstErrorKey,
-        controlErrors[firstErrorKey]
+        errors[firstErrorKey]
       );
-      return messages;
-    }, {} as { [key: string]: string });
+    }
+    return ""; // No error
   }
 }

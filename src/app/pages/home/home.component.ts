@@ -41,12 +41,6 @@ export class HomeComponent {
   ];
 
   constructor() {
-    // this.#userManageService
-    //   .loadUsers()
-    //   .pipe(takeUntilDestroyed())
-    //   .subscribe((users) => {
-    //     this.users.set(users);
-    //   });
 
     this.strategy$
       .pipe(takeUntilDestroyed())

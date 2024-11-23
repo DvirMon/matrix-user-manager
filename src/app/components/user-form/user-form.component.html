@@ -3,21 +3,17 @@
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>First Name</mat-label>
       <input matInput autocomplete="off" formControlName="firstName" required />
-      @if (messages$ | async; as messages) {
       <mat-error>
-        {{ messages["firstName"] }}
+        {{ errors["firstName"]() }}
       </mat-error>
-      }
     </mat-form-field>
 
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>Last Name</mat-label>
       <input matInput autocomplete="off" formControlName="lastName" required />
-      @if (messages$ | async; as messages) {
       <mat-error>
-        {{ messages["lastName"] }}
+        {{ errors["lastName"]() }}
       </mat-error>
-      }
     </mat-form-field>
   </div>
 
@@ -30,11 +26,9 @@
         type="number"
         formControlName="age"
         required />
-      @if (messages$ | async; as messages) {
       <mat-error>
-        {{ messages["age"] }}
+        {{ errors["age"]() }}
       </mat-error>
-      }
     </mat-form-field>
 
     <mat-form-field class="form-field" appearance="fill">
@@ -45,9 +39,7 @@
         <mat-option value="other">Other</mat-option>
       </mat-select>
       <mat-error>
-        @if (messages$ | async; as messages) {
-        {{ messages["gender"] }}
-        }
+        {{ errors["gender"]() }}
       </mat-error>
     </mat-form-field>
   </div>
@@ -72,11 +64,9 @@
         </mat-option>
         }
       </mat-autocomplete>
-      @if (messages$ | async; as messages) {
       <mat-error>
-        {{ messages["country"] }}
+        {{ errors["country"]() }}
       </mat-error>
-      }
     </mat-form-field>
 
     <mat-form-field class="form-field" appearance="fill">
@@ -86,11 +76,9 @@
         autocomplete="new-password"
         formControlName="city"
         required />
-      @if (messages$ | async; as messages) {
       <mat-error>
-        {{ messages["city"] }}
+        {{ errors["city"]() }}
       </mat-error>
-      }
     </mat-form-field>
   </div>
 

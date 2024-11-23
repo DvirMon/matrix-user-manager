@@ -3,14 +3,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  Injector,
   Input,
   OnInit,
+  runInInjectionContext,
+  Signal,
 } from "@angular/core";
 import {
   FormGroup,
   FormsModule,
   NonNullableFormBuilder,
-  ReactiveFormsModule
+  ReactiveFormsModule,
 } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
@@ -24,7 +27,7 @@ import {
   Observable,
   shareReplay,
   Subject,
-  switchMap
+  switchMap,
 } from "rxjs";
 import { OptionValidationDirective } from "src/app/directives/option-validation.directive";
 import { User } from "src/app/models/user";
@@ -33,10 +36,11 @@ import { CountriesService } from "src/app/services/utils/countries.service";
 import { UserDialogComponent } from "../user-dialog/user-dialog.component";
 import { provideUserMessageManger } from "./user-form-error.service";
 import { UserFormService } from "./user-form.service";
+import { Sign } from "crypto";
 
 @Component({
-    selector: "app-user-form",
-    imports: [
+  selector: "app-user-form",
+  imports: [
     AsyncPipe,
     FormsModule,
     ReactiveFormsModule,
@@ -45,15 +49,17 @@ import { UserFormService } from "./user-form.service";
     MatAutocompleteModule,
     MatSelectModule,
     MatButtonModule,
-    OptionValidationDirective
-],
-    templateUrl: "./user-form.component.html",
-    styleUrls: ["./user-form.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [FormErrorService, provideUserMessageManger()]
+    OptionValidationDirective,
+  ],
+  templateUrl: "./user-form.component.html",
+  styleUrls: ["./user-form.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [FormErrorService, provideUserMessageManger()],
 })
 export class UserFormComponent implements OnInit {
   @Input() user: Partial<User> | undefined = {};
+
+  #injector = inject(Injector);
 
   #fbn = inject(NonNullableFormBuilder);
 
@@ -71,7 +77,7 @@ export class UserFormComponent implements OnInit {
 
   filteredCountries$!: Observable<string[]>;
 
-  messages$!: Observable<{ [key: string]: string }>;
+  errors!: { [key: string]: Signal<string> };
 
   triggerValidCountries$!: Observable<string[]>;
 
@@ -80,7 +86,7 @@ export class UserFormComponent implements OnInit {
 
     this.filteredCountries$ = this.#getCountries();
 
-    this.messages$ = this.#formErrorService.getMessages$(this.userForm);
+    this.errors = this.#formErrorService.setErrors(this.userForm);
   }
 
   #getCountries(): Observable<string[]> {
