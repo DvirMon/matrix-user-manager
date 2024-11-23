@@ -9,7 +9,6 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
 import { User } from "src/app/models/user";
-import { UserTableService } from "./user-table.service";
 
 @Component({
   selector: "app-user-table",
@@ -17,7 +16,6 @@ import { UserTableService } from "./user-table.service";
   templateUrl: "./user-table.component.html",
   styleUrls: ["./user-table.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [UserTableService],
 })
 export class UserTableComponent {
   editEvent = output<User>();

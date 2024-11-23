@@ -20,9 +20,6 @@ export class UsersManagerService {
     return this.#userService.users;
   }
 
-  setUsers(users: User[]): void {
-    return this.#userService.users.update((data) => [...data, ...users]);
-  }
 
   loadUsers(): Observable<User[]> {
     return this.#userService.loadUsers();

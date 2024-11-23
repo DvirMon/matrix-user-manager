@@ -1,11 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  inject,
-  linkedSignal,
-  WritableSignal,
+  inject
 } from "@angular/core";
-import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RouterModule } from "@angular/router";
 import { filter, Subject, switchMap } from "rxjs";
 import { UserTableComponent } from "src/app/components/user-table/user-table.component";
@@ -27,17 +25,11 @@ import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float
 export class HomeComponent {
   #userManageService = inject(UsersManagerService);
 
-  // users = this.#userManageService.getUsers();
+  users = this.#userManageService.getUsers();
 
   strategySubject = new Subject<UserAction | null>();
 
   strategy$ = this.#setStrategy();
-
-  usersResource = rxResource<User[], unknown>({
-    loader: () => this.#userManageService.loadUsers(),
-  });
-
-  users = linkedSignal(() => this.usersResource.value());
 
   columns = [
     { key: "firstName", header: "First Name" },

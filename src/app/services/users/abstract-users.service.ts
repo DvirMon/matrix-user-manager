@@ -4,9 +4,7 @@ import { Observable } from "rxjs";
 import { User } from "src/app/models/user";
 
 export abstract class AbstractUsersService {
-
-  users = signal<User[]>([]);
-
+  abstract users: WritableSignal<User[]>;
   abstract loadUsers(): Observable<User[]>;
   abstract addUser(user: User): Observable<User[]>;
   abstract editUser(updatedUserData: Partial<User>): Observable<User[]>;

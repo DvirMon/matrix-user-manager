@@ -1,10 +1,11 @@
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, WritableSignal } from "@angular/core";
 import { map, Observable, of, switchMap } from "rxjs";
 import { v4 as uuidv4 } from "uuid";
 import { User } from "../../models/user";
 import { CrudService } from "../utils/crud.service";
 import { LocalStorageService } from "../utils/local-storage.service";
 import { AbstractUsersService } from "./abstract-users.service";
+import { rxResource } from "@angular/core/rxjs-interop";
 
 @Injectable({
   providedIn: "root",
@@ -15,6 +16,13 @@ export class UsersLocalService extends AbstractUsersService {
   #localStorageService = inject(LocalStorageService);
 
   #crudService = inject(CrudService);
+
+  #usersResource = rxResource<User[], unknown>({
+    loader: () => this.loadUsers(),
+  });
+
+  override users: WritableSignal<User[]> = this.#usersResource
+  .value as WritableSignal<User[]>;
 
   override loadUsers(): Observable<User[]> {
     return of(this.#localStorageService.load(this.STORAGE_KEY)).pipe(
@@ -40,13 +48,11 @@ export class UsersLocalService extends AbstractUsersService {
     const currentUsers = this.users();
     const updatedUsers = this.#crudService.deleteItem(currentUsers, userId);
     return this.#setData(updatedUsers);
-
   }
   editUser(updatedUser: Partial<User>): Observable<User[]> {
     const currentUsers = this.users();
     const updatedUsers = this.#crudService.editItem(currentUsers, updatedUser);
     return this.#setData(updatedUsers);
-
   }
 
   #setData(users: User[]): Observable<User[]> {

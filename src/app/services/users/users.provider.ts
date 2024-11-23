@@ -8,7 +8,7 @@ interface UsersConfig {
 }
 
 export function provideUsersLogic(
-  config: UsersConfig = { useLocal: true }
+  config: UsersConfig = { useLocal: false }
 ): Provider {
   return {
     provide: AbstractUsersService,

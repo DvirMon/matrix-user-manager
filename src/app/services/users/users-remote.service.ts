@@ -1,9 +1,10 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, WritableSignal } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { User } from "../../models/user";
 import { CrudService } from "../utils/crud.service";
 import { AbstractUsersService } from "./abstract-users.service";
+import { rxResource } from "@angular/core/rxjs-interop";
 
 @Injectable({
   providedIn: "root",
@@ -14,6 +15,13 @@ export class UsersRemoteService extends AbstractUsersService {
   #crudService = inject(CrudService);
 
   #http = inject(HttpClient);
+
+  #usersResource = rxResource<User[], unknown>({
+    loader: () => this.#http.get<User[]>(this.apiUrl),
+  });
+
+  override users: WritableSignal<User[]> = this.#usersResource
+    .value as WritableSignal<User[]>;
 
   loadUsers(): Observable<User[]> {
     return this.#http.get<User[]>(this.apiUrl);
