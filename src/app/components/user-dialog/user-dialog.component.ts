@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import { MAT_DIALOG_DATA, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
 import { User } from "src/app/models/user";
 import { UserFormComponent } from "../user-form/user-form.component";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 export interface UserDialogData {
   user: User | null;
@@ -11,7 +11,7 @@ export interface UserDialogData {
 
 @Component({
     selector: "app-user-dialog",
-    imports: [UserFormComponent],
+    imports: [MatDialogTitle, MatDialogContent, UserFormComponent],
     templateUrl: "./user-dialog.component.html",
     styleUrls: ["./user-dialog.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush

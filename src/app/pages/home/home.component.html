@@ -1,16 +1,18 @@
 <main>
   <div class="table-container">
+    @if(!usersResource.isLoading()) {
+
     <app-user-table
       [data]="users()"
       [columns]="columns"
       (deleteEvent)="onDeleteUserEvent($event)"
-    (editEvent)="onEditUserEvent($event)"></app-user-table>
+      (editEvent)="onEditUserEvent($event)"></app-user-table>
+    }
     <app-user-table
       [data]="users()"
       [columns]="columns"
       (deleteEvent)="onDeleteUserEvent($event)"
-    (editEvent)="onEditUserEvent($event)"></app-user-table>
+      (editEvent)="onEditUserEvent($event)"></app-user-table>
   </div>
 </main>
 <app-float-icon-button (clickEvent)="onAddUserEvent()"></app-float-icon-button>
-

@@ -1,4 +1,4 @@
-import { inject, Injectable, WritableSignal } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { map, Observable, of, switchMap } from "rxjs";
 import { v4 as uuidv4 } from "uuid";
 import { User } from "../../models/user";

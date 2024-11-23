@@ -1,7 +1,6 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable, WritableSignal } from "@angular/core";
-import { toObservable } from "@angular/core/rxjs-interop";
-import { map, Observable, of, switchMap, take, tap } from "rxjs";
+import { inject, Injectable } from "@angular/core";
+import { map, Observable } from "rxjs";
 import { User } from "../../models/user";
 import { CrudService } from "../utils/crud.service";
 import { AbstractUsersService } from "./abstract-users.service";
