@@ -5,6 +5,7 @@ import {
   inject,
   Injector,
   Input,
+  linkedSignal,
   OnInit,
   runInInjectionContext,
   Signal,
@@ -73,7 +74,10 @@ export class UserFormComponent implements OnInit {
 
   #countryValueSubject = new Subject<string>();
 
-  userForm!: FormGroup;
+  userForm = linkedSignal({
+    source: () => this.user,
+    computation : () => this.#userFormService.createUserForm(this.user, this.#fbn),
+  })
 
   filteredCountries$!: Observable<string[]>;
 
@@ -82,11 +86,11 @@ export class UserFormComponent implements OnInit {
   triggerValidCountries$!: Observable<string[]>;
 
   ngOnInit(): void {
-    this.userForm = this.#userFormService.createUserForm(this.user, this.#fbn);
+    // this.userForm = this.#userFormService.createUserForm(this.user, this.#fbn);
 
     this.filteredCountries$ = this.#getCountries();
 
-    this.errors = this.#formErrorService.getErrors(this.userForm);
+    this.errors = this.#formErrorService.getErrors(this.userForm());
   }
 
   #getCountries(): Observable<string[]> {
@@ -99,7 +103,7 @@ export class UserFormComponent implements OnInit {
   }
 
   onSave(): void {
-    const updateUser = { ...this.user, ...this.userForm.value };
+    const updateUser = { ...this.user, ...this.userForm().value };
     this.#dialogRef.close(updateUser);
   }
 
