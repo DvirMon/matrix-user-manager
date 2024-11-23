@@ -16,11 +16,11 @@ export class FormErrorService {
 
   #injector = inject(Injector);
 
-  setErrors(form: FormGroup) {
-    return runInInjectionContext(this.#injector, () => this.getErrors(form));
+  getErrors(form: FormGroup) {
+    return runInInjectionContext(this.#injector, () => this.#setErrors(form));
   }
 
-  getErrors(form: FormGroup): { [key: string]: Signal<string> } {
+  #setErrors(form: FormGroup): { [key: string]: Signal<string> } {
     const controlErrorStreams: { [key: string]: Signal<string> } = {};
 
     Object.keys(form.controls).forEach((key) => {

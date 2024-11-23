@@ -86,7 +86,7 @@ export class UserFormComponent implements OnInit {
 
     this.filteredCountries$ = this.#getCountries();
 
-    this.errors = this.#formErrorService.setErrors(this.userForm);
+    this.errors = this.#formErrorService.getErrors(this.userForm);
   }
 
   #getCountries(): Observable<string[]> {
