@@ -1,4 +1,4 @@
 <h1 mat-dialog-title>{{ isEditMode ? "Edit User" : "Add User" }}</h1>
 <div mat-dialog-content>
-  <app-user-form [user]="data.user || {}"></app-user-form>
+  <app-user-form [user]="data.user || null"></app-user-form>
 </div>

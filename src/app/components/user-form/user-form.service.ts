@@ -23,10 +23,7 @@ export function countryMatchValidator(validCountries: string[]): ValidatorFn {
 })
 export class UserFormService {
   //TODO - refactor with zod
-  createUserForm(
-    user: Partial<User> = {},
-    fbn: NonNullableFormBuilder
-  ): FormGroup {
+  createUserForm(user: User, fbn: NonNullableFormBuilder) {
     return fbn.group({
       firstName: [
         user.firstName || "",
@@ -40,7 +37,7 @@ export class UserFormService {
         user.age || null,
         [
           Validators.required,
-          Validators.min(1),
+          // Validators.min(1),
           Validators.pattern(/^[0-9]*$/),
         ],
       ],

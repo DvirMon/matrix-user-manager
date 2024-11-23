@@ -3,11 +3,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Injector,
-  Input,
+  input,
   linkedSignal,
   OnInit,
-  runInInjectionContext,
   Signal,
 } from "@angular/core";
 import {
@@ -31,13 +29,12 @@ import {
   switchMap,
 } from "rxjs";
 import { OptionValidationDirective } from "src/app/directives/option-validation.directive";
-import { User } from "src/app/models/user";
 import { FormErrorService } from "src/app/services/form/form-error.service";
 import { CountriesService } from "src/app/services/utils/countries.service";
 import { UserDialogComponent } from "../user-dialog/user-dialog.component";
 import { provideUserMessageManger } from "./user-form-error.service";
 import { UserFormService } from "./user-form.service";
-import { Sign } from "crypto";
+import { User, UserForm } from "src/app/models/user";
 
 @Component({
   selector: "app-user-form",
@@ -58,9 +55,7 @@ import { Sign } from "crypto";
   providers: [FormErrorService, provideUserMessageManger()],
 })
 export class UserFormComponent implements OnInit {
-  @Input() user: Partial<User> | undefined = {};
-
-  #injector = inject(Injector);
+  user = input.required<User | null>();
 
   #fbn = inject(NonNullableFormBuilder);
 
@@ -76,18 +71,20 @@ export class UserFormComponent implements OnInit {
 
   userForm = linkedSignal({
     source: () => this.user,
-    computation : () => this.#userFormService.createUserForm(this.user, this.#fbn),
-  })
+    computation: () =>
+      this.#userFormService.createUserForm(
+        this.user() || ({} as User),
+        this.#fbn
+      ),
+  });
 
   filteredCountries$!: Observable<string[]>;
 
-  errors!: { [key: string]: Signal<string> };
+  errors!: { [K in keyof UserForm]: Signal<string> };
 
   triggerValidCountries$!: Observable<string[]>;
 
   ngOnInit(): void {
-    // this.userForm = this.#userFormService.createUserForm(this.user, this.#fbn);
-
     this.filteredCountries$ = this.#getCountries();
 
     this.errors = this.#formErrorService.getErrors(this.userForm());

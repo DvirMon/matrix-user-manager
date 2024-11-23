@@ -1,4 +1,5 @@
 import { inject, Injector, runInInjectionContext, Signal } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { AbstractControl, FormGroup, ValidationErrors } from "@angular/forms";
 import { Observable } from "rxjs";
 import {
@@ -9,31 +10,37 @@ import {
   startWith,
 } from "rxjs/operators";
 import { MessageManager } from "../utils/messages-manger";
-import { toSignal } from "@angular/core/rxjs-interop";
 
+type ControlMap = Record<string, AbstractControl<any>>;
 export class FormErrorService {
   #messageManager = inject(MessageManager);
 
   #injector = inject(Injector);
 
-  getErrors(form: FormGroup) {
+  getErrors<TControl extends ControlMap = ControlMap>(
+    form: FormGroup<TControl>
+  ): { [K in keyof TControl]: Signal<string> } {
     return runInInjectionContext(this.#injector, () => this.#setErrors(form));
   }
 
-  #setErrors(form: FormGroup): { [key: string]: Signal<string> } {
-    const controlErrorStreams: { [key: string]: Signal<string> } = {};
+  #setErrors<TControl extends ControlMap>(
+    form: FormGroup<TControl>
+  ): { [K in keyof TControl]: Signal<string> } {
+    const controlErrorStreams: Partial<{
+      [K in keyof TControl]: Signal<string>;
+    }> = {};
 
     Object.keys(form.controls).forEach((key) => {
       const control = form.get(key);
       if (control) {
-        controlErrorStreams[key] = toSignal(
+        controlErrorStreams[key as keyof TControl] = toSignal(
           this.#getControlMessageStream(control, key),
           { initialValue: "" }
         );
       }
     });
 
-    return controlErrorStreams;
+    return controlErrorStreams as { [K in keyof TControl]: Signal<string> };
   }
 
   #getControlMessageStream(
