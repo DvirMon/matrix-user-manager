@@ -1,5 +1,11 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable, ResourceRef } from "@angular/core";
+import {
+  computed,
+  inject,
+  Injectable,
+  ResourceRef,
+  Signal,
+} from "@angular/core";
 import { rxResource } from "@angular/core/rxjs-interop";
 import { map, Observable, shareReplay } from "rxjs";
 
@@ -15,30 +21,22 @@ export class CountriesService {
 
   #countriesResource = rxResource({ loader: () => this.#getCountries() });
 
+  countries = computed(() => this.#countriesResource.value() || []);
+
   getCountriesResource(): ResourceRef<string[]> {
     return rxResource({ loader: () => this.#getCountries() });
   }
 
-  fetchCountries(): Observable<string[]> {
-    if (!this.#countriesCached$) {
-      this.#countriesCached$ = this.#getCountries();
-    }
-    return this.#countriesCached$;
-  }
-
   #getCountries(): Observable<string[]> {
-    return this.#http.get<any[]>(this.#URL).pipe(
-      map((data) => data.map((country) => country.name.common)),
-      shareReplay(1)
-    );
+    return this.#http
+      .get<any[]>(this.#URL)
+      .pipe(map((data) => data.map((country) => country.name.common)));
   }
 
-  filterCountries(query: string): Observable<string[]> {
-    return this.fetchCountries().pipe(
-      map((countries) =>
-        countries.filter((country) =>
-          country.toLowerCase().startsWith(query.toLowerCase())
-        )
+  filterCountries(query: Signal<string>): Signal<string[]> {
+    return computed(() =>
+      this.countries().filter((country: string) =>
+        country.toLowerCase().startsWith(query().toLowerCase())
       )
     );
   }

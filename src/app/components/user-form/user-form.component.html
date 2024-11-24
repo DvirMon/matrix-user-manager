@@ -55,10 +55,10 @@
         [matAutocomplete]="auto"
         (input)="onCountryChanged($event)"
         appOptionValidation
-        [list]="filteredCountries$ | async"
+        [list]="options()"
         required />
       <mat-autocomplete #auto="matAutocomplete">
-        @for (country of countriesResource.value(); track country) {
+        @for (country of options(); track country) {
         <mat-option [value]="country">
           {{ country }}
         </mat-option>

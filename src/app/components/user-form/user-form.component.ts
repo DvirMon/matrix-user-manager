@@ -1,7 +1,7 @@
-import { AsyncPipe } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   input,
   linkedSignal,
@@ -9,25 +9,15 @@ import {
   ResourceRef,
   Signal,
 } from "@angular/core";
-import {
-  FormsModule,
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-} from "@angular/forms";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogRef } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import {
-  debounceTime,
-  distinctUntilChanged,
-  Observable,
-  shareReplay,
-  Subject,
-  switchMap,
-} from "rxjs";
+import { debounceTime, distinctUntilChanged, Subject } from "rxjs";
 import { OptionValidationDirective } from "src/app/directives/option-validation.directive";
 import { User, UserForm } from "src/app/models/user";
 import { FormErrorService } from "src/app/services/form/form-error.service";
@@ -36,12 +26,10 @@ import { CountriesService } from "src/app/services/utils/countries.service";
 import { UserDialogComponent } from "../user-dialog/user-dialog.component";
 import { UserFormService } from "./user-form.service";
 import { messagesMap } from "./utils";
-import { toSignal } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-user-form",
   imports: [
-    AsyncPipe,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -75,37 +63,21 @@ export class UserFormComponent implements OnInit {
       this.#userFormService.createUserForm(this.user() || ({} as User)),
   });
 
-  filteredCountries$!: Observable<string[]>;
-
   errors!: { [K in keyof UserForm]: Signal<string> };
 
-  triggerValidCountries$!: Observable<string[]>;
+  query = this.#setQueryChanged();
 
-  countriesResource: ResourceRef<string[]> =
-    this.#countriesService.getCountriesResource();
-  
-  
+  options = this.#countriesService.filterCountries(this.query);
   ngOnInit(): void {
-    this.filteredCountries$ = this.#getCountries();
-
     this.errors = this.#formErrorService.getErrors(this.userForm());
   }
 
-  #getQueryChanged() {
+  #setQueryChanged() {
     const source$ = this.#countryValueSubject
       .asObservable()
       .pipe(debounceTime(300), distinctUntilChanged());
 
-    return toSignal(source$);
-  }
-
-  #getCountries(): Observable<string[]> {
-    return this.#countryValueSubject.asObservable().pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap((query) => this.#countriesService.filterCountries(query)),
-      shareReplay(1)
-    );
+    return toSignal(source$, { initialValue: "" });
   }
 
   onSave(): void {
