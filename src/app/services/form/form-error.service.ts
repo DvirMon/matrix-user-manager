@@ -16,17 +16,8 @@ import {
   startWith,
 } from "rxjs/operators";
 import { MessageManager } from "../utils/messages-manger";
-import { MessageErrorsService } from "./message-errors.service";
-
-export function provideFormErrorService(): Provider {
-  return [
-    FormErrorService,
-    { provide: MessageManager, useClass: MessageErrorsService },
-  ];
-}
 
 type ControlMap = Record<string, AbstractControl<any>>;
-
 
 export class FormErrorService {
   #messageManager = inject(MessageManager);

@@ -22,8 +22,11 @@ export class MessageErrorsService extends MessageManager {
     // Add default error messages
     this.addDefaultMessages();
 
+
+
     // Merge additional messages into the lookup map
     messages.forEach(([key, messageFn]) => {
+      console.log(messageFn);
       this.errorMessagesLookup.set(key, messageFn);
     });
   }

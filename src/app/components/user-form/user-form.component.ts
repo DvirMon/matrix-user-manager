@@ -10,7 +10,6 @@ import {
   Signal,
 } from "@angular/core";
 import {
-  FormGroup,
   FormsModule,
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -30,15 +29,13 @@ import {
   switchMap,
 } from "rxjs";
 import { OptionValidationDirective } from "src/app/directives/option-validation.directive";
-import {
-  FormErrorService,
-  provideFormErrorService,
-} from "src/app/services/form/form-error.service";
+import { User, UserForm } from "src/app/models/user";
+import { FormErrorService } from "src/app/services/form/form-error.service";
+import { provideFormErrorService } from "src/app/services/form/providers";
 import { CountriesService } from "src/app/services/utils/countries.service";
 import { UserDialogComponent } from "../user-dialog/user-dialog.component";
-import { provideUserMessageManger } from "./user-form-error.service";
 import { UserFormService } from "./user-form.service";
-import { User, UserForm } from "src/app/models/user";
+import { messagesMap } from "./utils";
 
 @Component({
   selector: "app-user-form",
@@ -57,7 +54,16 @@ import { User, UserForm } from "src/app/models/user";
   styleUrls: ["./user-form.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   // providers: [FormErrorService, provideUserMessageManger()],
-  providers: [provideFormErrorService()],
+  providers: [
+    provideFormErrorService([
+      [
+        "pattern",
+        (field: string) => {
+          return "pattern";
+        },
+      ],
+    ]),
+  ],
 })
 export class UserFormComponent implements OnInit {
   user = input.required<User | null>();
