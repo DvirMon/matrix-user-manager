@@ -5,11 +5,6 @@
       [columns]="columns"
       (deleteEvent)="onDeleteUserEvent($event)"
       (editEvent)="onEditUserEvent($event)"></app-user-table>
-    <app-user-table
-      [data]="users$ | async"
-      [columns]="columns"
-      (deleteEvent)="onDeleteUserEvent($event)"
-      (editEvent)="onEditUserEvent($event)"></app-user-table>
   </div>
 </main>
 <app-float-icon-button (clickEvent)="onAddUserEvent()"></app-float-icon-button>
