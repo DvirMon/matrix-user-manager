@@ -53,17 +53,7 @@ import { messagesMap } from "./utils";
   templateUrl: "./user-form.component.html",
   styleUrls: ["./user-form.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  // providers: [FormErrorService, provideUserMessageManger()],
-  providers: [
-    provideFormErrorService([
-      [
-        "pattern",
-        (field: string) => {
-          return "pattern";
-        },
-      ],
-    ]),
-  ],
+  providers: [provideFormErrorService({ errorMessages: messagesMap })],
 })
 export class UserFormComponent implements OnInit {
   user = input.required<User | null>();

@@ -4,6 +4,11 @@ import { MessageManager } from "../utils/messages-manger";
 import { FormErrorService } from "./form-error.service";
 import { MessageErrorsService } from "./message-errors.service";
 
+export type ReactiveErrorConfig = {
+  errorMessages?: ErrorMessageMapping;
+  messageManagerType?: { new (): MessageManager }; // Custom MessageManager type
+};
+
 /**
  * Type representing an array of error message mappings.
  * Each entry includes:
@@ -22,10 +27,15 @@ export function provideErrorMessage(value?: ErrorMessageMapping): Provider {
   };
 }
 
-export function provideFormErrorService(value?: ErrorMessageMapping): Provider {
+export function provideFormErrorService(
+  options: ReactiveErrorConfig
+): Provider {
   return [
     FormErrorService,
-    provideErrorMessage(value),
-    { provide: MessageManager, useClass: MessageErrorsService },
+    provideErrorMessage(options.errorMessages),
+    {
+      provide: MessageManager,
+      useClass: options.messageManagerType || MessageErrorsService,
+    },
   ];
 }

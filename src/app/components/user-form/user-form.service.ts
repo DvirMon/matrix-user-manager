@@ -9,20 +9,10 @@ import {
 } from "@angular/forms";
 import { User } from "src/app/models/user";
 
-export function countryMatchValidator(validCountries: string[]): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    if (!control.value) return null; // Allow empty values
-
-    const isValid = validCountries.includes(control.value);
-    return isValid ? null : { countryMismatch: true };
-  };
-}
-
 @Injectable({
   providedIn: "root",
 })
 export class UserFormService {
-  //TODO - refactor with zod
   createUserForm(user: User, fbn: NonNullableFormBuilder) {
     return fbn.group({
       firstName: [
