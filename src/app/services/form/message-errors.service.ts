@@ -1,41 +1,33 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { MessageManager } from "../utils/messages-manger";
+import { ERROR_MESSAGE_PROVIDERS } from "./tokens";
 
 @Injectable({
   providedIn: "root",
 })
 export class MessageErrorsService extends MessageManager {
-  // Default error messages lookup
   private errorMessagesLookup = new Map<
     string,
     (field: string, errorValue?: any) => string
-  >([
-    ["required", (field) => `${this.formatFieldName(field)} is required.`],
-    [
-      "minlength",
-      (field, errorValue) =>
-        `${this.formatFieldName(field)} must be at least ${
-          errorValue.requiredLength
-        } characters.`,
-    ],
-    [
-      "maxlength",
-      (field, errorValue) =>
-        `${this.formatFieldName(field)} cannot exceed ${
-          errorValue.requiredLength
-        } characters.`,
-    ],
-    [
-      "pattern",
-      (field) =>
-        `${this.formatFieldName(field)} does not match the required pattern.`,
-    ],
-  ]);
+  >();
 
-  /**
-   * Retrieves an error message for a specific form control validation error.
-   * Users can override or add messages by using `addErrorMessage`.
-   */
+  additionalMessages = inject(ERROR_MESSAGE_PROVIDERS, { optional: true });
+
+  constructor() {
+    super();
+
+    // Fallback to empty array if no additional messages are provided
+    const messages = this.additionalMessages ?? [];
+
+    // Add default error messages
+    this.addDefaultMessages();
+
+    // Merge additional messages into the lookup map
+    messages.forEach(([key, messageFn]) => {
+      this.errorMessagesLookup.set(key, messageFn);
+    });
+  }
+
   getErrorMessage(field: string, errorKey: string, errorValue?: any): string {
     const messageFn = this.errorMessagesLookup.get(errorKey);
     return messageFn
@@ -43,23 +35,32 @@ export class MessageErrorsService extends MessageManager {
       : `${this.formatFieldName(field)} is invalid.`;
   }
 
-  /**
-   * Adds or overrides an error message for a specific error key.
-   * @param errorKey - The validation error key (e.g., "required", "pattern").
-   * @param messageFn - A function that takes the field name and error value,
-   *                    and returns the error message.
-   */
-  addErrorMessage(
-    errorKey: string,
-    messageFn: (field: string, errorValue?: any) => string
-  ): void {
-    this.errorMessagesLookup.set(errorKey, messageFn);
+  private addDefaultMessages(): void {
+    this.errorMessagesLookup.set(
+      "required",
+      (field) => `${this.formatFieldName(field)} is required.`
+    );
+    this.errorMessagesLookup.set(
+      "minlength",
+      (field, errorValue) =>
+        `${this.formatFieldName(field)} must be at least ${
+          errorValue.requiredLength
+        } characters.`
+    );
+    this.errorMessagesLookup.set(
+      "maxlength",
+      (field, errorValue) =>
+        `${this.formatFieldName(field)} cannot exceed ${
+          errorValue.requiredLength
+        } characters.`
+    );
+    this.errorMessagesLookup.set(
+      "pattern",
+      (field) =>
+        `${this.formatFieldName(field)} does not match the required pattern.`
+    );
   }
 
-  /**
-   * Formats a field name into a more readable format (e.g., camelCase to "Camel Case").
-   * @param field - The name of the field to format.
-   */
   protected formatFieldName(field: string): string {
     return field
       .replace(/([A-Z])/g, " $1")
