@@ -36,6 +36,7 @@ import { CountriesService } from "src/app/services/utils/countries.service";
 import { UserDialogComponent } from "../user-dialog/user-dialog.component";
 import { UserFormService } from "./user-form.service";
 import { messagesMap } from "./utils";
+import { toSignal } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-user-form",
@@ -82,15 +83,24 @@ export class UserFormComponent implements OnInit {
 
   countriesResource: ResourceRef<string[]> =
     this.#countriesService.getCountriesResource();
-
+  
+  
   ngOnInit(): void {
     this.filteredCountries$ = this.#getCountries();
 
     this.errors = this.#formErrorService.getErrors(this.userForm());
   }
 
+  #getQueryChanged() {
+    const source$ = this.#countryValueSubject
+      .asObservable()
+      .pipe(debounceTime(300), distinctUntilChanged());
+
+    return toSignal(source$);
+  }
+
   #getCountries(): Observable<string[]> {
-    return this.#countryValueSubject.pipe(
+    return this.#countryValueSubject.asObservable().pipe(
       debounceTime(300),
       distinctUntilChanged(),
       switchMap((query) => this.#countriesService.filterCountries(query)),

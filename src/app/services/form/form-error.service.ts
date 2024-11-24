@@ -40,10 +40,11 @@ export class FormErrorService {
     Object.keys(form.controls).forEach((key) => {
       const control = form.get(key);
       if (control) {
-        controlErrorStreams[key as keyof TControl] = toSignal(
-          this.#getControlMessageStream(control, key),
-          { initialValue: "" }
-        );
+        const errorMessage$ = this.#getControlMessageStream(control, key);
+
+        controlErrorStreams[key as keyof TControl] = toSignal(errorMessage$, {
+          initialValue: "",
+        });
       }
     });
 

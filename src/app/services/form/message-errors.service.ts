@@ -6,7 +6,7 @@ import { ERROR_MESSAGE_PROVIDERS } from "./tokens";
   providedIn: "root",
 })
 export class MessageErrorsService extends MessageManager {
-  private errorMessagesLookup = new Map<
+  #errorMessagesLookup = new Map<
     string,
     (field: string, errorValue?: any) => string
   >();
@@ -20,41 +20,47 @@ export class MessageErrorsService extends MessageManager {
     const messages = this.additionalMessages ?? [];
 
     // Add default error messages
-    this.addDefaultMessages();
+    this.#addDefaultMessages();
 
     // Merge additional messages into the lookup map
-    messages.forEach(([key, messageFn]) => {
-      this.errorMessagesLookup.set(key, messageFn);
-    });
+    this.updateErrorMessages(messages);
   }
 
   getErrorMessage(field: string, errorKey: string, errorValue?: any): string {
-    const messageFn = this.errorMessagesLookup.get(errorKey);
+    const messageFn = this.#errorMessagesLookup.get(errorKey);
     return messageFn
       ? messageFn(field, errorValue)
       : `${this.formatFieldName(field)} is invalid.`;
   }
 
-  private addDefaultMessages(): void {
-    this.errorMessagesLookup.set(
+  updateErrorMessages(
+    messages: [string, (field: string, errorValue?: any) => string][]
+  ): void {
+    messages.forEach(([key, messageFn]) => {
+      this.#errorMessagesLookup.set(key, messageFn);
+    });
+  }
+
+  #addDefaultMessages(): void {
+    this.#errorMessagesLookup.set(
       "required",
       (field) => `${this.formatFieldName(field)} is required.`
     );
-    this.errorMessagesLookup.set(
+    this.#errorMessagesLookup.set(
       "minlength",
       (field, errorValue) =>
         `${this.formatFieldName(field)} must be at least ${
           errorValue.requiredLength
         } characters.`
     );
-    this.errorMessagesLookup.set(
+    this.#errorMessagesLookup.set(
       "maxlength",
       (field, errorValue) =>
         `${this.formatFieldName(field)} cannot exceed ${
           errorValue.requiredLength
         } characters.`
     );
-    this.errorMessagesLookup.set(
+    this.#errorMessagesLookup.set(
       "pattern",
       (field) =>
         `${this.formatFieldName(field)} does not match the required pattern.`
