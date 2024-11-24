@@ -58,7 +58,7 @@
         [list]="filteredCountries$ | async"
         required />
       <mat-autocomplete #auto="matAutocomplete">
-        @for (country of filteredCountries$ | async; track country) {
+        @for (country of countriesResource.value(); track country) {
         <mat-option [value]="country">
           {{ country }}
         </mat-option>

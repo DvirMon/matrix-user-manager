@@ -6,6 +6,7 @@ import {
   input,
   linkedSignal,
   OnInit,
+  ResourceRef,
   Signal,
 } from "@angular/core";
 import {
@@ -83,6 +84,9 @@ export class UserFormComponent implements OnInit {
   errors!: { [K in keyof UserForm]: Signal<string> };
 
   triggerValidCountries$!: Observable<string[]>;
+
+  countriesResource: ResourceRef<string[]> =
+    this.#countriesService.getCountriesResource();
 
   ngOnInit(): void {
     this.filteredCountries$ = this.#getCountries();

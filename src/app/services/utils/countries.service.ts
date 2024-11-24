@@ -1,16 +1,23 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, ResourceRef } from "@angular/core";
+import { rxResource } from "@angular/core/rxjs-interop";
 import { map, Observable, shareReplay } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class CountriesService {
-  #countriesCached$?: Observable<string[]>; 
+  #countriesCached$?: Observable<string[]>;
 
   readonly #http = inject(HttpClient);
 
   readonly #URL: string = "https://restcountries.com/v3.1/all";
+
+  #countriesResource = rxResource({ loader: () => this.#getCountries() });
+
+  getCountriesResource(): ResourceRef<string[]> {
+    return rxResource({ loader: () => this.#getCountries() });
+  }
 
   fetchCountries(): Observable<string[]> {
     if (!this.#countriesCached$) {
