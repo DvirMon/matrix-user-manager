@@ -30,7 +30,10 @@ import {
   switchMap,
 } from "rxjs";
 import { OptionValidationDirective } from "src/app/directives/option-validation.directive";
-import { FormErrorService } from "src/app/services/form/form-error.service";
+import {
+  FormErrorService,
+  provideFormErrorService,
+} from "src/app/services/form/form-error.service";
 import { CountriesService } from "src/app/services/utils/countries.service";
 import { UserDialogComponent } from "../user-dialog/user-dialog.component";
 import { provideUserMessageManger } from "./user-form-error.service";
@@ -53,7 +56,8 @@ import { User, UserForm } from "src/app/models/user";
   templateUrl: "./user-form.component.html",
   styleUrls: ["./user-form.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [FormErrorService, provideUserMessageManger()],
+  // providers: [FormErrorService, provideUserMessageManger()],
+  providers: [provideFormErrorService()],
 })
 export class UserFormComponent implements OnInit {
   user = input.required<User | null>();

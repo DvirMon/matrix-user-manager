@@ -1,4 +1,10 @@
-import { inject, Injector, runInInjectionContext, Signal } from "@angular/core";
+import {
+  inject,
+  Injector,
+  Provider,
+  runInInjectionContext,
+  Signal,
+} from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { AbstractControl, FormGroup, ValidationErrors } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -10,8 +16,18 @@ import {
   startWith,
 } from "rxjs/operators";
 import { MessageManager } from "../utils/messages-manger";
+import { MessageErrorsService } from "./message-errors.service";
+
+export function provideFormErrorService(): Provider {
+  return [
+    FormErrorService,
+    { provide: MessageManager, useClass: MessageErrorsService },
+  ];
+}
 
 type ControlMap = Record<string, AbstractControl<any>>;
+
+
 export class FormErrorService {
   #messageManager = inject(MessageManager);
 
@@ -70,6 +86,7 @@ export class FormErrorService {
   ): string {
     if (errors) {
       const firstErrorKey = Object.keys(errors)[0];
+
       return this.#messageManager.getErrorMessage(
         controlName,
         firstErrorKey,
