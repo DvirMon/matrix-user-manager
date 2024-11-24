@@ -14,6 +14,7 @@ import {
   map,
   shareReplay,
   startWith,
+  tap,
 } from "rxjs/operators";
 import { MessageManager } from "../utils/messages-manger";
 
@@ -69,7 +70,20 @@ export class FormErrorService {
     prevErrors: ValidationErrors,
     currErrors: ValidationErrors
   ): boolean {
-    return JSON.stringify(prevErrors) === JSON.stringify(currErrors);
+    const prevKeys = Object.keys(prevErrors);
+    const currKeys = Object.keys(currErrors);
+
+    if (prevKeys.length !== currKeys.length) {
+      return false;
+    }
+
+    // If there is more than one key, compare using JSON.stringify
+    if (prevKeys.length > 1) {
+      return JSON.stringify(prevErrors) === JSON.stringify(currErrors);
+    }
+
+    // For single-key objects, compare the error type
+    return prevKeys[0] === currKeys[0];
   }
 
   #getFirstErrorMessage(

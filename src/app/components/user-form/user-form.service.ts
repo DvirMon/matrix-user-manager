@@ -1,18 +1,12 @@
 import { inject, Injectable } from "@angular/core";
-import {
-  NonNullableFormBuilder,
-  Validators
-} from "@angular/forms";
+import { NonNullableFormBuilder, Validators } from "@angular/forms";
 import { User } from "src/app/models/user";
 
 @Injectable({
   providedIn: "root",
 })
-  
-
 export class UserFormService {
   #fbn = inject(NonNullableFormBuilder);
-
 
   createUserForm(user: User) {
     return this.#fbn.group({
@@ -26,11 +20,7 @@ export class UserFormService {
       ],
       age: [
         user.age || null,
-        [
-          Validators.required,
-          // Validators.min(1),
-          Validators.pattern(/^[0-9]*$/),
-        ],
+        [Validators.required, Validators.pattern(/^[0-9]*$/)],
       ],
       city: [
         user.city || "",

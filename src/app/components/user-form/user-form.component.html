@@ -2,7 +2,7 @@
   <div class="form-row">
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>First Name</mat-label>
-      <input matInput autocomplete="off" formControlName="firstName" required />
+      <input matInput autocomplete="off" formControlName="firstName"  />
       <mat-error>
         {{ errors["firstName"]() }}
       </mat-error>
@@ -10,7 +10,7 @@
 
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>Last Name</mat-label>
-      <input matInput autocomplete="off" formControlName="lastName" required />
+      <input matInput autocomplete="off" formControlName="lastName"  />
       <mat-error>
         {{ errors["lastName"]() }}
       </mat-error>
@@ -25,7 +25,7 @@
         autocomplete="off"
         type="number"
         formControlName="age"
-        required />
+         />
       <mat-error>
         {{ errors["age"]() }}
       </mat-error>
@@ -33,7 +33,7 @@
 
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>Gender</mat-label>
-      <mat-select formControlName="gender" required>
+      <mat-select formControlName="gender" >
         <mat-option value="female">Female</mat-option>
         <mat-option value="male">Male</mat-option>
         <mat-option value="other">Other</mat-option>
@@ -56,7 +56,7 @@
         (input)="onCountryChanged($event)"
         appOptionValidation
         [list]="options()"
-        required />
+         />
       <mat-autocomplete #auto="matAutocomplete">
         @for (country of options(); track country) {
         <mat-option [value]="country">
@@ -75,7 +75,7 @@
         matInput
         autocomplete="new-password"
         formControlName="city"
-        required />
+         />
       <mat-error>
         {{ errors.city() }}
       </mat-error>
