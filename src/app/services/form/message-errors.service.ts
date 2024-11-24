@@ -16,13 +16,10 @@ export class MessageErrorsService extends MessageManager {
   constructor() {
     super();
 
-    // Fallback to empty array if no additional messages are provided
     const messages = this.additionalMessages ?? [];
 
-    // Add default error messages
     this.#addDefaultMessages();
 
-    // Merge additional messages into the lookup map
     this.updateErrorMessages(messages);
   }
 
