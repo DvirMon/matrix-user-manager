@@ -1,20 +1,21 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import {
-  AbstractControl,
-  FormGroup,
   NonNullableFormBuilder,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
+  Validators
 } from "@angular/forms";
 import { User } from "src/app/models/user";
 
 @Injectable({
   providedIn: "root",
 })
+  
+
 export class UserFormService {
-  createUserForm(user: User, fbn: NonNullableFormBuilder) {
-    return fbn.group({
+  #fbn = inject(NonNullableFormBuilder);
+
+
+  createUserForm(user: User) {
+    return this.#fbn.group({
       firstName: [
         user.firstName || "",
         [Validators.required, Validators.pattern(/^[a-zA-Z\u0590-\u05FF\s]*$/)],

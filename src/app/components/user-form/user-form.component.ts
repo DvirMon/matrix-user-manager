@@ -58,8 +58,6 @@ import { messagesMap } from "./utils";
 export class UserFormComponent implements OnInit {
   user = input.required<User | null>();
 
-  #fbn = inject(NonNullableFormBuilder);
-
   #countriesService = inject(CountriesService);
 
   #userFormService = inject(UserFormService);
@@ -73,10 +71,7 @@ export class UserFormComponent implements OnInit {
   userForm = linkedSignal({
     source: () => this.user,
     computation: () =>
-      this.#userFormService.createUserForm(
-        this.user() || ({} as User),
-        this.#fbn
-      ),
+      this.#userFormService.createUserForm(this.user() || ({} as User)),
   });
 
   filteredCountries$!: Observable<string[]>;
@@ -104,7 +99,7 @@ export class UserFormComponent implements OnInit {
   }
 
   onSave(): void {
-    const updateUser = { ...this.user, ...this.userForm().value };
+    const updateUser = { ...this.user(), ...this.userForm().value };
     this.#dialogRef.close(updateUser);
   }
 
