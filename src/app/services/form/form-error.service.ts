@@ -1,10 +1,4 @@
-import {
-  inject,
-  Injector,
-  Provider,
-  runInInjectionContext,
-  Signal,
-} from "@angular/core";
+import { inject, Injector, runInInjectionContext, Signal } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { AbstractControl, FormGroup, ValidationErrors } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -14,18 +8,17 @@ import {
   map,
   shareReplay,
   startWith,
-  tap,
 } from "rxjs/operators";
-import { MessageManager } from "../utils/messages-manger";
+import { AbstractMessageManager } from "../utils/abstract-messages-manger";
 
 type ControlMap = Record<string, AbstractControl<any>>;
 
 export class FormErrorService {
-  #messageManager = inject(MessageManager);
+  #messageManager = inject(AbstractMessageManager);
 
   #injector = inject(Injector);
 
-  getErrors<TControl extends ControlMap = ControlMap>(
+  getErrors<TControl extends ControlMap>(
     form: FormGroup<TControl>
   ): { [K in keyof TControl]: Signal<string> } {
     return runInInjectionContext(this.#injector, () => this.#setErrors(form));

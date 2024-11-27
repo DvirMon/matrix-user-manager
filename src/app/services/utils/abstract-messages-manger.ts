@@ -4,7 +4,7 @@
  * error messages based on field names and validation error keys.
  * It can be extended to provide custom error message handling logic.
  */
-export abstract class MessageManager {
+export abstract class AbstractMessageManager {
   /**
    * Retrieves an error message for a specific form control validation error.
    *
@@ -41,4 +41,10 @@ export abstract class MessageManager {
     errorKey: string,
     errorValue?: any
   ): string;
+
+  protected formatFieldName(field: string): string {
+    return field
+      .replace(/([A-Z])/g, " $1")
+      .replace(/^./, (str) => str.toUpperCase());
+  }
 }

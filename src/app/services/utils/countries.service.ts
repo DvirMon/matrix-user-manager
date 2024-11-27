@@ -33,11 +33,10 @@ export class CountriesService {
       .pipe(map((data) => data.map((country) => country.name.common)));
   }
 
-  filterCountries(query: Signal<string>): Signal<string[]> {
-    return computed(() =>
-      this.countries().filter((country: string) =>
-        country.toLowerCase().startsWith(query().toLowerCase())
-      )
+  filterCountries(query: string): string[] {
+    console.log('called')
+    return this.countries().filter((country: string) =>
+      country.toLowerCase().startsWith(query.toLowerCase())
     );
   }
 }

@@ -67,7 +67,11 @@ export class UserFormComponent implements OnInit {
 
   query = this.#setQueryChanged();
 
-  options = this.#countriesService.filterCountries(this.query);
+  options = linkedSignal({
+    source: () => this.query(),
+    computation: (query: string) =>
+      this.#countriesService.filterCountries(query),
+  });
   ngOnInit(): void {
     this.errors = this.#formErrorService.getErrors(this.userForm());
   }
@@ -75,7 +79,7 @@ export class UserFormComponent implements OnInit {
   #setQueryChanged() {
     const source$ = this.#countryValueSubject
       .asObservable()
-      .pipe(debounceTime(300), distinctUntilChanged());
+      .pipe(debounceTime(300));
 
     return toSignal(source$, { initialValue: "" });
   }

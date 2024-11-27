@@ -1,11 +1,11 @@
 import { inject, Injectable } from "@angular/core";
-import { MessageManager } from "../utils/messages-manger";
+import { AbstractMessageManager } from "../utils/abstract-messages-manger";
 import { ERROR_MESSAGE_PROVIDERS } from "./tokens";
 
 @Injectable({
   providedIn: "root",
 })
-export class MessageErrorsService extends MessageManager {
+export class MessageErrorsService extends AbstractMessageManager {
   #errorMessagesLookup = new Map<
     string,
     (field: string, errorValue?: any) => string
@@ -62,11 +62,5 @@ export class MessageErrorsService extends MessageManager {
       (field) =>
         `${this.formatFieldName(field)} does not match the required pattern.`
     );
-  }
-
-  protected formatFieldName(field: string): string {
-    return field
-      .replace(/([A-Z])/g, " $1")
-      .replace(/^./, (str) => str.toUpperCase());
   }
 }

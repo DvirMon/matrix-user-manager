@@ -1,12 +1,12 @@
 import { Provider } from "@angular/core";
-import { ERROR_MESSAGE_PROVIDERS } from "./tokens";
-import { MessageManager } from "../utils/messages-manger";
+import { AbstractMessageManager } from "../utils/abstract-messages-manger";
 import { FormErrorService } from "./form-error.service";
 import { MessageErrorsService } from "./message-errors.service";
+import { ERROR_MESSAGE_PROVIDERS } from "./tokens";
 
 export type ReactiveErrorConfig = {
   errorMessages?: ErrorMessageMapping;
-  messageManagerType?: { new (): MessageManager }; // Custom MessageManager type
+  messageManagerType?: { new (): AbstractMessageManager }; // Custom MessageManager type
 };
 
 /**
@@ -28,13 +28,16 @@ export function provideErrorMessage(value?: ErrorMessageMapping): Provider {
 }
 
 export function provideFormErrorService(
-  options: ReactiveErrorConfig
+  options: ReactiveErrorConfig = {
+    errorMessages: [],
+    messageManagerType: MessageErrorsService,
+  }
 ): Provider {
   return [
     FormErrorService,
     provideErrorMessage(options.errorMessages),
     {
-      provide: MessageManager,
+      provide: AbstractMessageManager,
       useClass: options.messageManagerType || MessageErrorsService,
     },
   ];
