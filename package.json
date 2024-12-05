@@ -24,6 +24,7 @@
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
     "@types/node": "^20.3.2",
+    "ngx-infinite-scroll": "^19.0.0",
     "rxjs": "~7.5.0",
     "superjson": "^2.2.1",
     "tslib": "^2.3.0",
@@ -46,7 +47,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
     "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.14",
+    "tailwindcss": "^3.4.15",
     "typescript": "~5.6.3"
   }
 }
