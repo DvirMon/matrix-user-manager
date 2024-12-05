@@ -11,7 +11,10 @@ import {
 } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import {
+  MatAutocompleteModule,
+  MatAutocompleteSelectedEvent,
+} from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogRef } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -26,6 +29,7 @@ import { CountriesService } from "src/app/services/utils/countries.service";
 import { UserDialogComponent } from "../user-dialog/user-dialog.component";
 import { UserFormService } from "./user-form.service";
 import { messagesMap } from "./utils";
+import { InfiniteScrollDirective } from "ngx-infinite-scroll";
 
 @Component({
   selector: "app-user-form",
@@ -38,6 +42,7 @@ import { messagesMap } from "./utils";
     MatSelectModule,
     MatButtonModule,
     OptionValidationDirective,
+    InfiniteScrollDirective,
   ],
   templateUrl: "./user-form.component.html",
   styleUrls: ["./user-form.component.scss"],
@@ -45,6 +50,8 @@ import { messagesMap } from "./utils";
   providers: [provideFormErrorService({ errorMessages: messagesMap })],
 })
 export class UserFormComponent implements OnInit {
+  selector = ".country-list";
+
   user = input.required<User | null>();
 
   #countriesService = inject(CountriesService);
@@ -96,5 +103,17 @@ export class UserFormComponent implements OnInit {
   onCountryChanged(event: Event): void {
     const input = (event.target as HTMLInputElement).value;
     this.#countryValueSubject.next(input);
+  }
+
+  onCountrySelected(event: MatAutocompleteSelectedEvent) {
+    // this.#countriesService
+    //   .getCountryDetails(event.option.value)
+    //   .subscribe((country) => {
+    //     console.log(country[0]);
+    //   });
+  }
+
+  onScroll() {
+    console.log("Scrolling...");
   }
 }
