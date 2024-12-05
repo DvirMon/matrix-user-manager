@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  rapidAPI: "57485a124dmsh18da4f4933ac07bp1ba71bjsndb909a4928c8",
+  apiUrl: "https://countries-states-and-cities.p.rapidapi.com",
 };
 
 /*
