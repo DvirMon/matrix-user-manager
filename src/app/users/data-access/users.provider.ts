@@ -1,7 +1,7 @@
 import { Provider } from "@angular/core";
-import { AbstractUsersService } from "./abstract-users.service";
-import { UsersLocalService } from "./users-local.service";
-import { UsersRemoteService } from "./users-remote.service";
+import { AbstractUsersService } from "./services/abstract-users.service";
+import { UsersLocalService } from "./services/users-local.service";
+import { UsersRemoteService } from "./services/users-remote.service";
 
 interface UsersConfig {
   useLocal: boolean;

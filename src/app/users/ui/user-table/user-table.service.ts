@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, combineLatest, map } from "rxjs";
-import { User } from "src/app/models/user";
+import { User } from "src/app/users/data-access/user";
 
 @Injectable({
   providedIn: "root",

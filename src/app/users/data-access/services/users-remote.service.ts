@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable, WritableSignal } from "@angular/core";
 import { map, Observable } from "rxjs";
-import { User } from "../../models/user";
-import { CrudService } from "../utils/crud.service";
+import { User } from "../user";
+import { CrudService } from "../../../shared/services/utils/crud.service";
 import { AbstractUsersService } from "./abstract-users.service";
 import { rxResource } from "@angular/core/rxjs-interop";
 

@@ -1,9 +1,9 @@
 import { inject, Injectable, WritableSignal } from "@angular/core";
 import { map, Observable, of, switchMap } from "rxjs";
 import { v4 as uuidv4 } from "uuid";
-import { User } from "../../models/user";
-import { CrudService } from "../utils/crud.service";
-import { LocalStorageService } from "../utils/local-storage.service";
+import { User } from "../user";
+import { CrudService } from "../../../shared/services/utils/crud.service";
+import { LocalStorageService } from "../../../shared/services/utils/local-storage.service";
 import { AbstractUsersService } from "./abstract-users.service";
 import { rxResource } from "@angular/core/rxjs-interop";
 
@@ -22,7 +22,7 @@ export class UsersLocalService extends AbstractUsersService {
   });
 
   override users: WritableSignal<User[]> = this.#usersResource
-  .value as WritableSignal<User[]>;
+    .value as WritableSignal<User[]>;
 
   override loadUsers(): Observable<User[]> {
     return of(this.#localStorageService.load(this.STORAGE_KEY)).pipe(

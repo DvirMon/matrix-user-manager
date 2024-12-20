@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { catchError, filter, map, Observable, of } from "rxjs";
-import { User } from "src/app/models/user";
+import { User } from "src/app/users/data-access/user";
 import superjson from "superjson";
 
 @Injectable({
@@ -21,7 +21,6 @@ export class LocalStorageService {
   set(key: string, users: User[]): void {
     localStorage.setItem(key, superjson.stringify(users));
   }
-
 
   load$(key: string): Observable<unknown> {
     return of(null).pipe(

@@ -1,6 +1,6 @@
 import { inject, Injectable, WritableSignal } from "@angular/core";
 import { Observable } from "rxjs";
-import { User } from "../../models/user";
+import { User } from "../user";
 import { AbstractUsersService } from "./abstract-users.service";
 import { ActionType, UserStrategyService } from "./user-strategy.service";
 
@@ -19,7 +19,6 @@ export class UsersManagerService {
   getUsers(): WritableSignal<User[]> {
     return this.#userService.users;
   }
-
 
   loadUsers(): Observable<User[]> {
     return this.#userService.loadUsers();

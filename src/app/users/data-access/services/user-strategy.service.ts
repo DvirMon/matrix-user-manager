@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { filter, map, Observable, of, switchMap, tap } from "rxjs";
-import { UserDialogService } from "../../components/user-dialog/user-dialog.service";
-import { User } from "../../models/user";
+import { UserDialogService } from "../../ui/user-dialog/user-dialog.service";
+import { User } from "../user";
 import { AbstractUsersService } from "./abstract-users.service";
 
 export enum ActionType {

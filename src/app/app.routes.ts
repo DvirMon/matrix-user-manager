@@ -5,7 +5,9 @@ export const routes: Routes = [
     path: "",
 
     loadComponent: () =>
-      import("./pages/home/home.component").then((m) => m.HomeComponent),
+      import("./users/users-dashboard.component").then(
+        (m) => m.UsersDashboardComponent
+      ),
   },
   { path: "", redirectTo: "/", pathMatch: "full" },
 ];

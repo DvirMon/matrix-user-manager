@@ -1,7 +1,7 @@
 // users.service.token.ts
 import { signal, WritableSignal } from "@angular/core";
 import { Observable } from "rxjs";
-import { User } from "src/app/models/user";
+import { User } from "src/app/users/data-access/user";
 
 export abstract class AbstractUsersService {
   abstract users: WritableSignal<User[]>;

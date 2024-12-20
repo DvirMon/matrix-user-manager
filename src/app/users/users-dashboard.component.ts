@@ -1,28 +1,24 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RouterModule } from "@angular/router";
 import { filter, Subject, switchMap } from "rxjs";
-import { UserTableComponent } from "src/app/components/user-table/user-table.component";
-import { User } from "src/app/models/user";
-import { ActionType } from "src/app/services/users/user-strategy.service";
+import { UserTableComponent } from "src/app/users/ui/user-table/user-table.component";
+import { User } from "src/app/users/data-access/user";
+import { ActionType } from "src/app/users/data-access/services/user-strategy.service";
 import {
   UserAction,
   UsersManagerService,
-} from "src/app/services/users/users-manager.service";
-import { FloatIconButtonComponent } from "src/app/shared/float-icon-button/float-icon-button.component";
+} from "src/app/users/data-access/services/users-manager.service";
+import { FloatIconButtonComponent } from "src/app/shared/ui/float-icon-button/float-icon-button.component";
 
 @Component({
-  selector: "app-home",
+  selector: "app-users-dashboard",
   imports: [RouterModule, FloatIconButtonComponent, UserTableComponent],
-  templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.scss"],
+  templateUrl: "./users-dashboard.component.html",
+  styleUrls: ["./users-dashboard.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {
+export class UsersDashboardComponent {
   #userManageService = inject(UsersManagerService);
 
   users = this.#userManageService.getUsers();
@@ -41,7 +37,6 @@ export class HomeComponent {
   ];
 
   constructor() {
-
     this.strategy$
       .pipe(takeUntilDestroyed())
       .subscribe((users) => this.users.set(users));

@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { NonNullableFormBuilder, Validators } from "@angular/forms";
-import { User } from "src/app/models/user";
+import { User } from "src/app/users/data-access/user";
 
 @Injectable({
   providedIn: "root",
